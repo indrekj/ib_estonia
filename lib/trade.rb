@@ -1,0 +1,28 @@
+require 'virtus'
+
+class Trade
+  include Virtus.value_object
+
+  values do
+    attribute :date, String # Settlement date
+    attribute :type, String # BUY/SELL
+    attribute :quantity, Integer
+    attribute :price, Decimal
+    attribute :currency, String
+    attribute :symbol, String
+  end
+
+  def amount
+    quantity * price
+  end
+
+  def to_s
+    [
+      date,
+      type,
+      "#{quantity}x#{Format(price)}",
+      Format(amount),
+      currency
+    ].join("\t")
+  end
+end

@@ -1,0 +1,31 @@
+#!/usr/bin/env ruby
+
+require 'nokogiri'
+require_relative './lib/trade'
+require_relative './lib/stock_tax_report'
+
+unless ARGV[0]
+  puts "Usage: ./start 2017.xml"
+  exit 1
+end
+
+doc = File.open(ARGV[0]) { |f| Nokogiri::XML(f) }
+
+stock_trades = doc.xpath("//TradeConfirm[@assetCategory='STK']")
+  .map(&:attributes)
+  .each do |record|
+    record.each {|key, val| record[key] = val.value}
+  end
+  .map do |record|
+    Trade.new(
+      date: record['settleDate'],
+      type: record['buySell'],
+      quantity: record['quantity'],
+      price: record['price'],
+      currency: record['currency'],
+      symbol: record['symbol']
+    )
+  end
+
+report = StockTaxReport.new(stock_trades)
+report.print
