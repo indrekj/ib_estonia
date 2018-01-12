@@ -9,42 +9,46 @@ class StockTaxReport
   end
 
   def generate_tax_records
-    tax_records = []
-
-    @trades_by_symbol.each do |symbol, trades|
-      trades = trades.sort_by(&:date)
-      next if trades[0].type != 'BUY'
-
-      seen_trades = []
-      trades.each do |trade|
-        if trade.type == 'SELL'
-          avg_buy_price = calc_avg_price(seen_trades)
-
-          tax_record = StockTaxRecord.new(
-            symbol: symbol,
-            date: trade.date,
-            quantity: trade.quantity.abs,
-            price: trade.price,
-            avg_buy_price: avg_buy_price
-          )
-
-          seen_trades << Trade.new(
-            quantity: -1 * tax_record.quantity,
-            price: avg_buy_price
-          )
-          tax_records << tax_record
-        else
-          seen_trades << trade
-        end
-      end
+    @trades_by_symbol.reduce([]) do |tax_records, (symbol, trades)|
+      tax_records + generate_tax_records_for_symbol(symbol, trades)
     end
-
-    tax_records
   end
 
   def print
     generate_tax_records.each do |record|
       puts record
+    end
+  end
+
+  private
+
+  def generate_tax_records_for_symbol(symbol, trades)
+    seen_trades = []
+    first_trade_type = trades[0].type
+
+    trades.reduce([]) do |tax_records, trade|
+      if trade.type != first_trade_type
+        avg_open_price = calc_avg_price(seen_trades)
+
+        tax_record = StockTaxRecord.new(
+          type: trade.type,
+          symbol: symbol,
+          date: trade.date,
+          quantity: trade.quantity.abs,
+          close_price: trade.price,
+          avg_open_price: avg_open_price
+        )
+
+        seen_trades << Trade.new(
+          quantity: -1 * tax_record.quantity,
+          price: avg_open_price
+        )
+
+        tax_records + [tax_record]
+      else
+        seen_trades << trade
+        tax_records
+      end
     end
   end
 
