@@ -34,6 +34,7 @@ class StockTaxReport
           type: trade.type,
           symbol: symbol,
           date: trade.date,
+          currency: trade.currency,
           quantity: trade.quantity.abs,
           close_price: trade.price,
           avg_open_price: avg_open_price

@@ -6,7 +6,8 @@ class StockTaxRecord
   values do
     attribute :type, String # BUY/SELL
     attribute :symbol, String
-    attribute :date, String
+    attribute :date, Date
+    attribute :currency, String
     attribute :quantity, Integer
     attribute :close_price, Decimal
     attribute :avg_open_price, Decimal
@@ -44,7 +45,8 @@ class StockTaxRecord
       "#{quantity}x#{Format(close_price)}",
       "bought: #{Format(buy_amount)}",
       "sold: #{Format(sell_amount)}",
-      "profit: #{Format(profit)}"
+      "profit: #{Format(profit)}",
+      currency
     ].join("\t")
   end
 end
