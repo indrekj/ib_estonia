@@ -1,5 +1,6 @@
 require_relative './format'
 require_relative './stock_tax_record'
+require_relative './emta_formatters/stock_formatter'
 
 class StockTaxReport
   def initialize(trades)
@@ -15,9 +16,8 @@ class StockTaxReport
   end
 
   def print
-    generate_tax_records.each do |record|
-      puts record
-    end
+    EmtaFormatters::StockFormatter.format(generate_tax_records)
+      .each {|record| puts record.join("\t")}
   end
 
   private

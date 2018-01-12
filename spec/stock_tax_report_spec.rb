@@ -1,3 +1,4 @@
+require 'symbol_info'
 require 'stock_tax_report'
 require 'trade'
 
@@ -111,7 +112,7 @@ describe StockTaxReport do
       quantity: 5,
       price: '122.45',
       currency: 'USD',
-      symbol: 'VOO'
+      symbol: {ticker: 'VOO', description: 'S&P500'}
     }.merge(opts))
   end
 

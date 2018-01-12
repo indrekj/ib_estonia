@@ -5,7 +5,7 @@ class StockTaxRecord
 
   values do
     attribute :type, String # BUY/SELL
-    attribute :symbol, String
+    attribute :symbol, SymbolInfo
     attribute :date, Date
     attribute :currency, String
     attribute :quantity, Integer
@@ -23,28 +23,28 @@ class StockTaxRecord
 
   def profit
     if closing_long?
-      sell_amount - buy_amount
+      close_amount - open_amount
     else
-      buy_amount - sell_amount
+      open_amount - close_amount
     end
   end
 
-  def buy_amount
+  def open_amount
     quantity * avg_open_price
   end
 
-  def sell_amount
+  def close_amount
     quantity * close_price
   end
 
   def to_s
     [
-      symbol,
+      symbol.ticker,
       from_position,
       date,
       "#{quantity}x#{Format(close_price)}",
-      "bought: #{Format(buy_amount)}",
-      "sold: #{Format(sell_amount)}",
+      "bought: #{Format(open_amount)}",
+      "sold: #{Format(close_amount)}",
       "profit: #{Format(profit)}",
       currency
     ].join("\t")

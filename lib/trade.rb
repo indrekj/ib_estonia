@@ -9,7 +9,7 @@ class Trade
     attribute :quantity, Integer
     attribute :price, Decimal
     attribute :currency, String
-    attribute :symbol, String
+    attribute :symbol, SymbolInfo
   end
 
   def amount

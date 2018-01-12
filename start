@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
 require 'nokogiri'
+require_relative './lib/symbol_info'
 require_relative './lib/trade'
 require_relative './lib/stock_tax_report'
 require_relative './lib/exchange_rate_fetcher'
@@ -13,6 +14,15 @@ end
 doc = File.open(ARGV[0]) { |f| Nokogiri::XML(f) }
 
 exchange_rate_fetcher = ExchangeRateFetcher.new
+
+symbols = doc.xpath("//SymbolSummary[@assetCategory='STK']")
+  .map(&:attributes)
+  .each do |record|
+    record.each {|key, val| record[key] = val.value}
+  end
+  .map do |record|
+    SymbolInfo.new(ticker: record['symbol'], description: record['description'])
+  end
 
 stock_trades = doc.xpath("//TradeConfirm[@assetCategory='STK']")
   .map(&:attributes)
@@ -34,7 +44,7 @@ stock_trades = doc.xpath("//TradeConfirm[@assetCategory='STK']")
       quantity: record['quantity'],
       price: record['price'],
       currency: record['currency'],
-      symbol: record['symbol']
+      symbol: symbols.detect {|symbol| symbol.ticker == record['symbol']}
     )
   end
   .map do |trade|
