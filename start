@@ -1,9 +1,7 @@
 #!/usr/bin/env ruby
 
 require 'nokogiri'
-require_relative './lib/symbol_info'
-require_relative './lib/trade'
-require_relative './lib/stock_tax_report'
+require_relative './lib/ib_estonia'
 require_relative './lib/exchange_rate_fetcher'
 
 unless ARGV[0]
@@ -21,7 +19,10 @@ symbols = doc.xpath("//SymbolSummary[@assetCategory='STK']")
     record.each {|key, val| record[key] = val.value}
   end
   .map do |record|
-    SymbolInfo.new(ticker: record['symbol'], description: record['description'])
+    IbEstonia::SymbolInfo.new(
+      ticker: record['symbol'],
+      description: record['description']
+    )
   end
 
 stock_trades = doc.xpath("//TradeConfirm[@assetCategory='STK']")
@@ -38,7 +39,7 @@ stock_trades = doc.xpath("//TradeConfirm[@assetCategory='STK']")
       record['transactionType'] == 'FracShareCancel'
   end
   .map do |record|
-    Trade.new(
+    IbEstonia::Stocks::Trade.new(
       date: record['settleDate'],
       type: record['buySell'],
       quantity: record['quantity'].to_i.abs,
@@ -59,5 +60,5 @@ stock_trades = doc.xpath("//TradeConfirm[@assetCategory='STK']")
     )
   end
 
-report = StockTaxReport.new(stock_trades)
+report = IbEstonia::Stocks::TaxReport.new(stock_trades)
 report.print

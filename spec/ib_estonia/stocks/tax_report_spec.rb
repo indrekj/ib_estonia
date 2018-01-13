@@ -1,8 +1,6 @@
-require 'symbol_info'
-require 'stock_tax_report'
-require 'trade'
+require 'ib_estonia'
 
-describe StockTaxReport do
+describe IbEstonia::Stocks::TaxReport do
   it 'returns empty list when no trades' do
     expect(generate([])).to eq([])
   end
@@ -126,7 +124,7 @@ describe StockTaxReport do
   end
 
   def generate_trade(type, opts = {})
-    Trade.new({
+    IbEstonia::Stocks::Trade.new({
       date: next_day.strftime("%Y%m%d"),
       type: type,
       quantity: 5,
