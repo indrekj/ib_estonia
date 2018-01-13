@@ -48,6 +48,7 @@ class StockTaxReport
     class OpenTrade
       include Virtus.model
 
+      attribute :type
       attribute :quantity
       attribute :price
       attribute :commision
@@ -73,19 +74,24 @@ class StockTaxReport
 
     def <<(trade)
       @open_trades << OpenTrade.new(
+        type: trade.type,
         quantity: trade.quantity,
         price: trade.price,
         commision: 0
       )
     end
+
+    def should_close?(trade)
+      return false if @open_trades.empty?
+      @open_trades[0].type != trade.type
+    end
   end
 
   def generate_tax_records_for_symbol(symbol, trades)
     symbol_portfolio = SymbolPortfolio.new
-    first_trade_type = trades[0].type
 
     trades.reduce([]) do |tax_records, trade|
-      if trade.type != first_trade_type
+      if symbol_portfolio.should_close?(trade)
         open_amount = symbol_portfolio.close(trade.quantity)
 
         tax_record = StockTaxRecord.new(

@@ -93,6 +93,26 @@ describe StockTaxReport do
     expect(tax_records[2].profit).to eq(39.0)
   end
 
+  it 'returns multiple records when switching between short and long position' do
+    tax_records = generate([
+      # Starting short position
+      generate_short_trade(quantity: 5, price: 45.0),
+
+      # Closing short position
+      generate_long_trade(quantity: 5, price: 40.0),
+
+      # Starting long position
+      generate_long_trade(quantity: 3, price: 70.0),
+
+      # Closing long position
+      generate_short_trade(quantity: 3, price: 78.0)
+    ])
+
+    expect(tax_records.count).to eq(2)
+    expect(tax_records[0].profit).to eq(25.0)
+    expect(tax_records[1].profit).to eq(24.0)
+  end
+
   def generate(trades)
     described_class.new(trades).generate_tax_records
   end
