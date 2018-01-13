@@ -10,7 +10,7 @@ class StockTaxRecord
     attribute :currency, String
     attribute :quantity, Integer
     attribute :close_price, Decimal
-    attribute :avg_open_price, Decimal
+    attribute :open_amount, Decimal
   end
 
   def closing_long?
@@ -27,10 +27,6 @@ class StockTaxRecord
     else
       open_amount - close_amount
     end
-  end
-
-  def open_amount
-    quantity * avg_open_price
   end
 
   def close_amount

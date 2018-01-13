@@ -74,8 +74,8 @@ describe StockTaxReport do
 
     expect(tax_records.count).to eq(3)
     expect(tax_records[0].profit).to eq(9.60)
-    expect(tax_records[1].profit).to eq(7.55)
-    expect(tax_records[2].profit).to eq(44.25)
+    expect(tax_records[1].profit).to eq(9.5)
+    expect(tax_records[2].profit).to eq(42.3)
   end
 
   it 'returns multiple records when buying/selling short position multiple times' do
@@ -89,8 +89,8 @@ describe StockTaxReport do
 
     expect(tax_records.count).to eq(3)
     expect(tax_records[0].profit).to eq(10.0)
-    expect(tax_records[1].profit).to eq(6.0)
-    expect(tax_records[2].profit).to eq(40.0)
+    expect(tax_records[1].profit).to eq(7.0)
+    expect(tax_records[2].profit).to eq(39.0)
   end
 
   def generate(trades)

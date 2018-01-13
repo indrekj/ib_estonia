@@ -41,7 +41,7 @@ stock_trades = doc.xpath("//TradeConfirm[@assetCategory='STK']")
     Trade.new(
       date: record['settleDate'],
       type: record['buySell'],
-      quantity: record['quantity'],
+      quantity: record['quantity'].to_i.abs,
       price: record['price'],
       currency: record['currency'],
       symbol: symbols.detect {|symbol| symbol.ticker == record['symbol']}
