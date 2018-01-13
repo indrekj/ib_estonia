@@ -111,10 +111,4 @@ class StockTaxReport
       end
     end
   end
-
-  def calc_avg_price(seen_trades)
-    amount = seen_trades.reduce(0) {|sum, x| sum + x.amount}
-    quantity = seen_trades.reduce(0) {|sum, x| sum + x.quantity}
-    amount / quantity
-  end
 end
