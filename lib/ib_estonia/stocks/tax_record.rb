@@ -9,8 +9,10 @@ module IbEstonia
         attribute :date, Date
         attribute :currency, String
         attribute :quantity, Integer
+        attribute :close_commission, Decimal
         attribute :close_price, Decimal
         attribute :open_amount, Decimal
+        attribute :open_commission, Decimal
       end
 
       def closing_long?
@@ -39,8 +41,8 @@ module IbEstonia
           from_position,
           date,
           "#{quantity}x#{Format(close_price)}",
-          "bought: #{Format(open_amount)}",
-          "sold: #{Format(close_amount)}",
+          "open: #{Format(open_amount)}",
+          "close: #{Format(close_amount)}",
           "profit: #{Format(profit)}",
           currency
         ].join("\t")

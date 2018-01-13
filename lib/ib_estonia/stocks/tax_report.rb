@@ -25,7 +25,7 @@ module IbEstonia
 
         trades.reduce([]) do |tax_records, trade|
           if symbol_balance.should_close?(trade)
-            open_amount = symbol_balance.close(trade.quantity)
+            open_amount, open_commission = symbol_balance.close(trade.quantity)
 
             tax_record = TaxRecord.new(
               type: trade.type,
@@ -33,8 +33,10 @@ module IbEstonia
               date: trade.date,
               currency: trade.currency,
               quantity: trade.quantity.abs,
+              close_commission: trade.commission,
               close_price: trade.price,
-              open_amount: open_amount
+              open_amount: open_amount,
+              open_commission: open_commission
             )
 
             tax_records + [tax_record]

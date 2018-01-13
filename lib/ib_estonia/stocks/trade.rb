@@ -8,6 +8,7 @@ module IbEstonia
         attribute :type, String # BUY/SELL
         attribute :quantity, Integer
         attribute :price, Decimal
+        attribute :commission, Decimal
         attribute :currency, String
         attribute :symbol, SymbolInfo
       end

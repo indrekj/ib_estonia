@@ -15,9 +15,9 @@ module IbEstonia
           tax_record.quantity,
           tax_record.date.strftime("%Y-%m-%d"),
           country(tax_record),
-          Format(tax_record.open_amount),
-          "TODO: kulud",
-          Format(tax_record.close_amount),
+          open_amount(tax_record),
+          close_commission(tax_record),
+          close_amount(tax_record),
           0
         ]
       end
@@ -34,6 +34,30 @@ module IbEstonia
 
       def self.country(tax_record)
         "TODO: country"
+      end
+
+      def self.open_amount(tax_record)
+        if tax_record.closing_long?
+          Format(tax_record.open_amount + tax_record.open_commission)
+        else
+          Format(tax_record.close_amount + tax_record.close_commission)
+        end
+      end
+
+      def self.close_amount(tax_record)
+        if tax_record.closing_long?
+          Format(tax_record.close_amount)
+        else
+          Format(tax_record.open_amount)
+        end
+      end
+
+      def self.close_commission(tax_record)
+        if tax_record.closing_long?
+          Format(tax_record.close_commission)
+        else
+          Format(tax_record.open_commission)
+        end
       end
     end
   end

@@ -1,6 +1,9 @@
 require 'ib_estonia'
+require 'stocks_helper'
 
 describe IbEstonia::Stocks::TaxReport do
+  include StocksHelper
+
   it 'returns empty list when no trades' do
     expect(generate([])).to eq([])
   end
@@ -129,6 +132,7 @@ describe IbEstonia::Stocks::TaxReport do
       type: type,
       quantity: 5,
       price: '122.45',
+      commission: 0,
       currency: 'USD',
       symbol: {ticker: 'VOO', description: 'S&P500'}
     }.merge(opts))
