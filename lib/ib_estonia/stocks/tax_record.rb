@@ -9,10 +9,10 @@ module IbEstonia
         attribute :date, Date
         attribute :currency, String
         attribute :quantity, Integer
-        attribute :close_commission, Decimal
-        attribute :close_price, Decimal
-        attribute :open_amount, Decimal
-        attribute :open_commission, Decimal
+        attribute :close_commission, BigDecimal
+        attribute :close_price, BigDecimal
+        attribute :open_amount, BigDecimal
+        attribute :open_commission, BigDecimal
       end
 
       def closing_long?

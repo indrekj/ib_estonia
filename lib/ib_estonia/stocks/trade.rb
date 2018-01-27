@@ -7,8 +7,8 @@ module IbEstonia
         attribute :date, Date # Settlement date
         attribute :type, String # BUY/SELL
         attribute :quantity, Integer
-        attribute :price, Decimal
-        attribute :commission, Decimal
+        attribute :price, BigDecimal
+        attribute :commission, BigDecimal
         attribute :currency, String
         attribute :symbol, SymbolInfo
       end
