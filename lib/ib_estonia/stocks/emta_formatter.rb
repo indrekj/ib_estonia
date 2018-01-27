@@ -3,9 +3,8 @@ module IbEstonia
     # See https://www.emta.ee/sites/default/files/eraklient/tulu-deklareerimine/deklaratsioonide-vormid/2017/tabel_8.2.pdf
     module EmtaFormatter
       def self.format(tax_records)
-        tax_records.map do |tax_record|
-          format_record(tax_record)
-        end
+        tax_records
+          .map(&method(:format_record))
       end
 
       def self.format_record(tax_record)
