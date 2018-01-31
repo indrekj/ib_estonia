@@ -13,7 +13,25 @@ doc = File.open(ARGV[0]) { |f| Nokogiri::XML(f) }
 
 exchange_rate_fetcher = ExchangeRateFetcher.new
 
-symbols = doc.xpath("//SymbolSummary[@assetCategory='STK']")
+def change_currency(trade, exchange_rate_fetcher)
+  trade.with(
+    currency: 'EUR',
+    price: exchange_rate_fetcher.convert(
+      amount: trade.price,
+      from: trade.currency,
+      to: 'EUR',
+      date: trade.date
+    ),
+    commission: exchange_rate_fetcher.convert(
+      amount: trade.commission,
+      from: trade.currency,
+      to: 'EUR',
+      date: trade.date
+    )
+  )
+end
+
+symbols = doc.xpath("//SymbolSummary")
   .map(&:attributes)
   .each do |record|
     record.each {|key, val| record[key] = val.value}
@@ -49,23 +67,27 @@ stock_trades = doc.xpath("//TradeConfirm[@assetCategory='STK']")
       symbol: symbols.detect {|symbol| symbol.ticker == record['symbol']}
     )
   end
-  .map do |trade|
-    trade.with(
-      currency: 'EUR',
-      price: exchange_rate_fetcher.convert(
-        amount: trade.price,
-        from: trade.currency,
-        to: 'EUR',
-        date: trade.date
-      ),
-      commission: exchange_rate_fetcher.convert(
-        amount: trade.commission,
-        from: trade.currency,
-        to: 'EUR',
-        date: trade.date
-      )
+  .map {|trade| change_currency(trade, exchange_rate_fetcher)}
+
+option_trades = doc.xpath("//TradeConfirm[@assetCategory='OPT']")
+  .map(&:attributes)
+  .each do |record|
+    record.each {|key, val| record[key] = val.value}
+  end
+  .map do |record|
+    IbEstonia::Options::Trade.new(
+      date: record['settleDate'],
+      type: record['buySell'],
+      quantity: record['quantity'].to_i.abs,
+      price: record['price'],
+      commission: BigDecimal(record['commission']).abs,
+      currency: record['currency'],
+      symbol: symbols.detect {|symbol| symbol.ticker == record['symbol']},
+      strike: BigDecimal(record['strike']),
+      multiplier: record['multiplier'].to_i
     )
   end
+  .map {|trade| change_currency(trade, exchange_rate_fetcher)}
 
-report = IbEstonia::Stocks::TaxReport.new(stock_trades)
+report = IbEstonia::TaxReport.new(stock_trades + option_trades)
 report.print

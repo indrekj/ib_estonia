@@ -1,9 +1,6 @@
-require 'ib_estonia'
-require 'stocks_helper'
+require 'spec_helper'
 
-describe IbEstonia::Stocks::SymbolBalance do
-  include StocksHelper
-
+describe IbEstonia::SymbolBalance do
   let(:balance) { described_class.new }
 
   it 'adds commission to open amount on close' do

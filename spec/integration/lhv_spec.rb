@@ -1,5 +1,4 @@
-require 'ib_estonia'
-require 'stocks_helper'
+require 'spec_helper'
 
 # Uses https://www.lhv.ee/images/docs/LHV_maksuaruanne.pdf to verify different
 # use cases.
@@ -9,8 +8,6 @@ require 'stocks_helper'
 # because we use a 5 decimal place exchange rate and round it only when
 # formatting already calculated tax records.
 describe 'LHV' do
-  include StocksHelper
-
   it 'tests selling stocks in multiple chunks' do
     tax_records = generate([
       generate_long_trade(
@@ -48,8 +45,8 @@ describe 'LHV' do
   end
 
   def generate(trades)
-    records = IbEstonia::Stocks::TaxReport.new(trades).generate_tax_records
-    IbEstonia::Stocks::EmtaFormatter.format(records)
+    records = IbEstonia::TaxReport.new(trades).generate_tax_records
+    IbEstonia::EmtaFormatter.format(records)
   end
 
   def to_eur(amount, rate)

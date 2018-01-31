@@ -1,0 +1,71 @@
+module IbEstonia
+  # See https://www.emta.ee/sites/default/files/eraklient/tulu-deklareerimine/deklaratsioonide-vormid/2017/tabel_8.2.pdf
+  module EmtaFormatter
+    def self.format(tax_records)
+      tax_records
+        .map(&method(:format_record))
+    end
+
+    def self.format_record(tax_record)
+      [
+        name(tax_record),
+        asset_class(tax_record),
+        tax_record.quantity,
+        tax_record.date.strftime("%Y-%m-%d"),
+        country(tax_record),
+        open_amount(tax_record),
+        close_commission(tax_record),
+        close_amount(tax_record),
+        0
+      ]
+    end
+
+    def self.asset_class(tax_record)
+      if tax_record.asset_class == AssetClass::STOCK
+        'aktsia'
+      elsif tax_record.asset_class == AssetClass::OPTION
+        'optioon'
+      else
+        'unknown'
+      end
+    end
+
+    def self.name(tax_record)
+      symbol = tax_record.symbol
+
+      if tax_record.closing_long?
+        "#{symbol.ticker}: #{symbol.description}"
+      else
+        "#{symbol.ticker}: #{symbol.description}**"
+      end
+    end
+
+    def self.country(tax_record)
+      "TODO: country"
+    end
+
+    def self.open_amount(tax_record)
+      if tax_record.closing_long?
+        Format(tax_record.open_amount + tax_record.open_commission)
+      else
+        Format(tax_record.close_amount + tax_record.close_commission)
+      end
+    end
+
+    def self.close_amount(tax_record)
+      if tax_record.closing_long?
+        Format(tax_record.close_amount)
+      else
+        Format(tax_record.open_amount)
+      end
+    end
+
+    def self.close_commission(tax_record)
+      if tax_record.closing_long?
+        Format(tax_record.close_commission)
+      else
+        Format(tax_record.open_commission)
+      end
+    end
+  end
+end
