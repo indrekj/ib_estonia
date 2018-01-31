@@ -10,21 +10,21 @@ require 'spec_helper'
 describe 'LHV' do
   it 'tests selling stocks in multiple chunks' do
     tax_records = generate([
-      generate_long_trade(
+      buy_stock(
         symbol: {ticker: 'MSFT', description: 'Microsoft Corporation'},
         date: '20110319',
         quantity: 100,
         price: to_eur(BigDecimal('24.86'), 1.413),
         commission: to_eur(BigDecimal('22.29'), 1.413)
       ),
-      generate_long_trade(
+      buy_stock(
         symbol: {ticker: 'MSFT', description: 'Microsoft Corporation'},
         date: '20110326',
         quantity: 200,
         price: to_eur(BigDecimal('24.50'), 1.4114),
         commission: to_eur(BigDecimal('29.53'), 1.4114)
       ),
-      generate_short_trade(
+      sell_stock(
         symbol: {ticker: 'MSFT', description: 'Microsoft Corporation'},
         date: '20111104',
         quantity: 150,

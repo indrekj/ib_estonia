@@ -1,14 +1,14 @@
 require 'ib_estonia'
 
-def generate_long_trade(opts = {})
-  generate_trade('BUY', opts)
+def buy_stock(opts = {})
+  generate_stock_trade('BUY', opts)
 end
 
-def generate_short_trade(opts = {})
-  generate_trade('SELL', opts)
+def sell_stock(opts = {})
+  generate_stock_trade('SELL', opts)
 end
 
-def generate_trade(type, opts = {})
+def generate_stock_trade(type, opts = {})
   IbEstonia::Stocks::Trade.new({
     date: next_day.strftime("%Y%m%d"),
     type: type,
