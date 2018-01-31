@@ -33,7 +33,8 @@ module IbEstonia
         type: trade.type,
         quantity: trade.quantity,
         price: trade.price,
-        commission: trade.commission
+        commission: trade.commission,
+        multiplier: trade.multiplier
       )
     end
 
@@ -50,6 +51,7 @@ module IbEstonia
       attribute :price, BigDecimal
       attribute :commission, BigDecimal
       attribute :closed_quantity, Integer, default: 0
+      attribute :multiplier, Integer
 
       def remaining_quantity
         quantity - closed_quantity
@@ -60,7 +62,7 @@ module IbEstonia
           raise "Trying to close more than remaining"
         end
 
-        amount = quantity_to_close * price
+        amount = quantity_to_close * price * multiplier
         amount_commission = commission * (BigDecimal(quantity_to_close) / BigDecimal(quantity))
 
         self.closed_quantity += quantity_to_close

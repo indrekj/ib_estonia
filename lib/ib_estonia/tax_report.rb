@@ -34,7 +34,7 @@ module IbEstonia
             currency: trade.currency,
             quantity: trade.quantity.abs,
             close_commission: trade.commission,
-            close_price: trade.price,
+            close_price: trade.price * trade.multiplier,
             open_amount: open_amount,
             open_commission: open_commission
           )

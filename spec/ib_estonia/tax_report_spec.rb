@@ -37,6 +37,16 @@ describe IbEstonia::TaxReport do
     expect(tax_records[0].profit).to eq(9.4)
   end
 
+  it 'returns one record when closing call option fully' do
+    tax_records = generate([
+      buy_call(quantity: 3, price: 10.3),
+      sell_call(quantity: 3, price: 12.3)
+    ])
+
+    expect(tax_records.count).to eq(1)
+    expect(tax_records[0].profit).to eq(600.0)
+  end
+
   it 'returns multiple records when closing long position in chunks' do
     tax_records = generate([
       buy_stock(quantity: 5, price: 105.3),
@@ -59,6 +69,18 @@ describe IbEstonia::TaxReport do
     expect(tax_records.count).to eq(2)
     expect(tax_records[0].profit).to eq(12.0)
     expect(tax_records[1].profit).to eq(14.0)
+  end
+
+  it 'returns multiple records when closing call option in chunks' do
+    tax_records = generate([
+      buy_call(quantity: 5, price: 1.1),
+      sell_call(quantity: 2, price: 1.2),
+      sell_call(quantity: 3, price: 1.4)
+    ])
+
+    expect(tax_records.count).to eq(2)
+    expect(tax_records[0].profit).to eq(20.0)
+    expect(tax_records[1].profit).to eq(90.0)
   end
 
   it 'returns multiple records when buying/selling long position multiple times' do
@@ -89,6 +111,21 @@ describe IbEstonia::TaxReport do
     expect(tax_records[0].profit).to eq(10.0)
     expect(tax_records[1].profit).to eq(7.0)
     expect(tax_records[2].profit).to eq(39.0)
+  end
+
+  it 'returns multiple records when buying/selling call option multiple times' do
+    tax_records = generate([
+      buy_call(quantity: 5, price: 1.01),
+      sell_call(quantity: 2, price: 1.10),
+      buy_call(quantity: 3, price: 1.11),
+      sell_call(quantity: 1, price: 1.14),
+      sell_call(quantity: 5, price: 1.16)
+    ])
+
+    expect(tax_records.count).to eq(3)
+    expect(tax_records[0].profit).to eq(18.0)
+    expect(tax_records[1].profit).to eq(13.0)
+    expect(tax_records[2].profit).to eq(45.0)
   end
 
   it 'returns multiple records when switching between short and long position' do

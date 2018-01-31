@@ -44,6 +44,41 @@ describe 'LHV' do
     expect(tax_records[0][7]).to eq('3058.16')
   end
 
+  it 'tests exercising call option' do
+    tax_records = generate([
+      buy_call(
+        symbol: {ticker: 'CBMWAUG117200', description: 'BMW call Aug 2011 72'},
+        date: '20110801',
+        quantity: 4,
+        multiplier: 100,
+        strike: BigDecimal('50.0'),
+        price: BigDecimal('1.9'),
+        commission: BigDecimal('16.0')
+      ),
+      sell_call(
+        symbol: {ticker: 'CBMWAUG117200', description: 'BMW call Aug 2011 72'},
+        date: '20110802',
+        quantity: 2,
+        multiplier: 100,
+        strike: BigDecimal('50.0'),
+        price: BigDecimal('2.0'),
+        commission: BigDecimal('8.0')
+      )
+      # TODO: rest of the trade
+    ])
+
+    expect(tax_records.count).to eq(1)
+    expect(tax_records[0][0]).to eq('CBMWAUG117200: BMW call Aug 2011 72')
+    expect(tax_records[0][1]).to eq('optsioon')
+    expect(tax_records[0][2]).to eq(2)
+    expect(tax_records[0][3]).to eq('2011-08-02')
+    expect(tax_records[0][4]).to eq('TODO: country') # USA
+    expect(tax_records[0][5]).to eq('388.00')
+    expect(tax_records[0][6]).to eq('8.00')
+    expect(tax_records[0][7]).to eq('400.00')
+  end
+
+
   def generate(trades)
     records = IbEstonia::TaxReport.new(trades).generate_tax_records
     IbEstonia::EmtaFormatter.format(records)

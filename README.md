@@ -10,6 +10,7 @@ TODO
 
 ## Limitations
 
-* Currently only stock trades are supported
+* Currently basic stock and option trades are supported
 * Long positions that have changed to a short position or vice versa are not displayed correctly (e.g. BUY 10 $RP, SELL 20 $RP). However closing a position and opening a new works correctly (e.g. BUY 10 $RP, SELL 10 $RP, SELL 10 $RP).
 * Stock splits are not supported
+* Options exercising is not supported

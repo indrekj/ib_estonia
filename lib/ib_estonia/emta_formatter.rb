@@ -24,7 +24,7 @@ module IbEstonia
       if tax_record.asset_class == AssetClass::STOCK
         'aktsia'
       elsif tax_record.asset_class == AssetClass::OPTION
-        'optioon'
+        'optsioon'
       else
         'unknown'
       end

@@ -21,6 +21,10 @@ module IbEstonia
         AssetClass::STOCK
       end
 
+      def multiplier
+        1
+      end
+
       def to_s
         [
           "STOCK",
