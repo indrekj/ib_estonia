@@ -1,93 +1,16 @@
 #!/usr/bin/env ruby
 
-require 'nokogiri'
-require_relative './lib/ib_estonia'
-require_relative './lib/exchange_rate_fetcher'
+require 'ib_estonia'
+require 'exchange_rate_fetcher'
 
 unless ARGV[0]
   puts "Usage: ./start 2017.xml"
   exit 1
 end
 
-doc = File.open(ARGV[0]) { |f| Nokogiri::XML(f) }
-
+data = File.read(ARGV[0])
 exchange_rate_fetcher = ExchangeRateFetcher.new
+trades = IbEstonia::Importer.import(data, exchange_rate_fetcher)
 
-def change_currency(trade, exchange_rate_fetcher)
-  trade.with(
-    currency: 'EUR',
-    price: exchange_rate_fetcher.convert(
-      amount: trade.price,
-      from: trade.currency,
-      to: 'EUR',
-      date: trade.date
-    ),
-    commission: exchange_rate_fetcher.convert(
-      amount: trade.commission,
-      from: trade.currency,
-      to: 'EUR',
-      date: trade.date
-    )
-  )
-end
-
-symbols = doc.xpath("//SymbolSummary")
-  .map(&:attributes)
-  .each do |record|
-    record.each {|key, val| record[key] = val.value}
-  end
-  .map do |record|
-    IbEstonia::SymbolInfo.new(
-      ticker: record['symbol'],
-      description: record['description']
-    )
-  end
-
-stock_trades = doc.xpath("//TradeConfirm[@assetCategory='STK']")
-  .map(&:attributes)
-  .each do |record|
-    record.each {|key, val| record[key] = val.value}
-  end
-  .reject do |record|
-    # Not sure why these are even listed here. Only seen happening with frac
-    # share after a reverse split.
-    #
-    # Rejecting reverse splits because we don't currently support them.
-    record['transactionType'] == 'FracShare' ||
-      record['transactionType'] == 'FracShareCancel'
-  end
-  .map do |record|
-    IbEstonia::Stocks::Trade.new(
-      date: record['settleDate'],
-      type: record['buySell'],
-      quantity: record['quantity'].to_i.abs,
-      price: record['price'],
-      commission: BigDecimal(record['commission']).abs,
-      currency: record['currency'],
-      symbol: symbols.detect {|symbol| symbol.ticker == record['symbol']}
-    )
-  end
-  .map {|trade| change_currency(trade, exchange_rate_fetcher)}
-
-option_trades = doc.xpath("//TradeConfirm[@assetCategory='OPT']")
-  .map(&:attributes)
-  .each do |record|
-    record.each {|key, val| record[key] = val.value}
-  end
-  .map do |record|
-    IbEstonia::Options::Trade.new(
-      date: record['settleDate'],
-      type: record['buySell'],
-      quantity: record['quantity'].to_i.abs,
-      price: record['price'],
-      commission: BigDecimal(record['commission']).abs,
-      currency: record['currency'],
-      symbol: symbols.detect {|symbol| symbol.ticker == record['symbol']},
-      strike: BigDecimal(record['strike']),
-      multiplier: record['multiplier'].to_i
-    )
-  end
-  .map {|trade| change_currency(trade, exchange_rate_fetcher)}
-
-report = IbEstonia::TaxReport.new(stock_trades + option_trades)
+report = IbEstonia::TaxReport.new(trades)
 report.print

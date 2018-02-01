@@ -1,5 +1,7 @@
 require 'virtus'
+require 'nokogiri'
 
+require_relative './ib_estonia/importer'
 require_relative './ib_estonia/format'
 require_relative './ib_estonia/asset_class'
 require_relative './ib_estonia/symbol_info'

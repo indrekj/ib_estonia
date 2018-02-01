@@ -1,5 +1,9 @@
 require 'ib_estonia'
 
+def read_fixture(name)
+  File.read(File.dirname(__FILE__) + "/fixtures/#{name}")
+end
+
 def buy_stock(opts = {})
   generate_stock_trade('BUY', opts)
 end
