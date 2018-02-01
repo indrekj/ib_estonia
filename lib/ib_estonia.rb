@@ -1,5 +1,6 @@
 require 'virtus'
 require 'nokogiri'
+require 'terminal-table'
 
 require_relative './ib_estonia/importer'
 require_relative './ib_estonia/format'

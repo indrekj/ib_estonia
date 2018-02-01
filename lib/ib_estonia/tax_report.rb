@@ -13,8 +13,10 @@ module IbEstonia
     end
 
     def print
-      EmtaFormatter.format(generate_tax_records)
-        .each {|record| puts record.join("\t")}
+      table = Terminal::Table.new(
+        rows: EmtaFormatter.format(generate_tax_records)
+      )
+      puts table
     end
 
     private
