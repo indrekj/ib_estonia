@@ -3,6 +3,7 @@ module IbEstonia
   module EmtaFormatter
     def self.format(tax_records)
       tax_records
+        .sort_by(&:date)
         .map(&method(:format_record))
     end
 
