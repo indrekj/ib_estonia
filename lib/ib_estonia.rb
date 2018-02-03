@@ -4,7 +4,7 @@ require 'terminal-table'
 
 require_relative './ib_estonia/importer'
 require_relative './ib_estonia/format'
-require_relative './ib_estonia/asset_class'
+require_relative './ib_estonia/security_type'
 require_relative './ib_estonia/symbol_info'
 require_relative './ib_estonia/tax_report'
 require_relative './ib_estonia/tax_record'

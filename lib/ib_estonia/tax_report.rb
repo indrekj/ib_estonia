@@ -29,7 +29,7 @@ module IbEstonia
           open_amount, open_commission = symbol_balance.close(trade.quantity)
 
           tax_record = TaxRecord.new(
-            asset_class: trade.asset_class,
+            security_type: trade.security_type,
             type: trade.type,
             symbol: symbol,
             date: trade.date,

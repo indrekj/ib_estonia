@@ -3,7 +3,7 @@ module IbEstonia
     include Virtus.value_object
 
     values do
-      attribute :asset_class, String
+      attribute :security_type, String
       attribute :type, String # BUY/SELL
       attribute :symbol, SymbolInfo
       attribute :date, Date

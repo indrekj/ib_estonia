@@ -1,5 +1,5 @@
 module IbEstonia
-  module AssetClass
+  module SecurityType
     STOCK = 'STOCK'
     OPTION = 'OPTION'
   end

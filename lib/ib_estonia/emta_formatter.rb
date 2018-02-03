@@ -10,7 +10,7 @@ module IbEstonia
     def self.format_record(tax_record)
       [
         name(tax_record),
-        asset_class(tax_record),
+        security_type(tax_record),
         tax_record.quantity,
         tax_record.date.strftime("%Y-%m-%d"),
         country(tax_record),
@@ -21,10 +21,10 @@ module IbEstonia
       ]
     end
 
-    def self.asset_class(tax_record)
-      if tax_record.asset_class == AssetClass::STOCK
+    def self.security_type(tax_record)
+      if tax_record.security_type == SecurityType::STOCK
         'aktsia'
-      elsif tax_record.asset_class == AssetClass::OPTION
+      elsif tax_record.security_type == SecurityType::OPTION
         'optsioon'
       else
         'unknown'

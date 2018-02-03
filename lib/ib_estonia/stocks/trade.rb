@@ -17,8 +17,8 @@ module IbEstonia
         quantity * price
       end
 
-      def asset_class
-        AssetClass::STOCK
+      def security_type
+        SecurityType::STOCK
       end
 
       def multiplier
