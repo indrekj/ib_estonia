@@ -37,7 +37,7 @@ module IbEstonia
 
     def to_s
       [
-        symbol.ticker,
+        symbol.name,
         from_position,
         date,
         "#{quantity}x#{Format(close_price)}",

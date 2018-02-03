@@ -17,7 +17,7 @@ module IbEstonia
         end
         .map do |record|
           SymbolInfo.new(
-            ticker: record['symbol'],
+            name: record['symbol'],
             description: record['description']
           )
         end
@@ -45,7 +45,7 @@ module IbEstonia
             price: record['price'],
             commission: BigDecimal(record['commission']).abs,
             currency: record['currency'],
-            symbol: symbols.detect {|symbol| symbol.ticker == record['symbol']}
+            symbol: symbols.detect {|symbol| symbol.name == record['symbol']}
           )
         end
     end
@@ -64,7 +64,7 @@ module IbEstonia
             price: record['price'],
             commission: BigDecimal(record['commission']).abs,
             currency: record['currency'],
-            symbol: symbols.detect {|symbol| symbol.ticker == record['symbol']},
+            symbol: symbols.detect {|symbol| symbol.name == record['symbol']},
             strike: BigDecimal(record['strike']),
             multiplier: record['multiplier'].to_i
           )

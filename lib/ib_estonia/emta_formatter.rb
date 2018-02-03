@@ -35,9 +35,9 @@ module IbEstonia
       symbol = tax_record.symbol
 
       if tax_record.closing_long?
-        "#{symbol.ticker}: #{symbol.description}"
+        "#{symbol.name}: #{symbol.description}"
       else
-        "#{symbol.ticker}: #{symbol.description}**"
+        "#{symbol.name}: #{symbol.description}**"
       end
     end
 

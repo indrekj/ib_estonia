@@ -3,7 +3,7 @@ module IbEstonia
     include Virtus.value_object
 
     values do
-      attribute :ticker, String
+      attribute :name, String
       attribute :description, String
     end
   end
