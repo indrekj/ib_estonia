@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe IbEstonia::SymbolBalance do
+describe IbEstonia::Trades::SymbolBalance do
   let(:balance) { described_class.new }
 
   it 'adds commission to open amount on close' do

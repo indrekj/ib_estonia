@@ -1,6 +1,6 @@
 module IbEstonia
-  module Stocks
-    class Trade
+  module Trades
+    class OptionTrade
       include Virtus.value_object
 
       values do
@@ -11,23 +11,21 @@ module IbEstonia
         attribute :commission, BigDecimal
         attribute :currency, String
         attribute :symbol, SymbolInfo
+        attribute :strike, BigDecimal
+        attribute :multiplier, Integer
       end
 
       def amount
-        quantity * price
+        quantity * price * multiplier
       end
 
       def security_type
-        SecurityType::STOCK
-      end
-
-      def multiplier
-        1
+        SecurityType::OPTION
       end
 
       def to_s
         [
-          "STOCK",
+          "OPTION",
           date,
           type,
           "#{quantity}x#{Format(price)}",

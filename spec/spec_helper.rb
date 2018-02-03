@@ -21,7 +21,7 @@ def sell_call(opts = {})
 end
 
 def generate_stock_trade(type, opts = {})
-  IbEstonia::Stocks::Trade.new({
+  IbEstonia::Trades::StockTrade.new({
     date: next_day.strftime("%Y%m%d"),
     type: type,
     quantity: 5,
@@ -33,7 +33,7 @@ def generate_stock_trade(type, opts = {})
 end
 
 def generate_option_trade(type, opts = {})
-  IbEstonia::Options::Trade.new({
+  IbEstonia::Trades::OptionTrade.new({
     date: next_day.strftime("%Y%m%d"),
     type: type,
     quantity: 5,

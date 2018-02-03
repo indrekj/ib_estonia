@@ -80,8 +80,8 @@ describe 'LHV' do
 
 
   def generate(trades)
-    records = IbEstonia::TaxReport.new(trades).generate_tax_records
-    IbEstonia::EmtaFormatter.format(records)
+    records = IbEstonia::Trades::TaxReport.new(trades).generate_tax_records
+    IbEstonia::Trades::EmtaFormatter.format(records)
   end
 
   def to_eur(amount, rate)

@@ -6,7 +6,7 @@ require 'ib_estonia'
 require 'exchange_rate_fetcher'
 
 unless ARGV[0]
-  puts "Usage: ./start confirms-2016.xml confirms-2017.xml ..."
+  puts "Usage: ./start ib-2016.xml ib-2017.xml ..."
   exit 1
 end
 
@@ -15,8 +15,8 @@ exchange_rate_fetcher = ExchangeRateFetcher.new
 trades = ARGV.reduce([]) do |acc, path|
   puts ">> Importing #{path}"
   data = File.read(path)
-  acc + IbEstonia::Importer.import(data, exchange_rate_fetcher)
+  acc + IbEstonia::Trades::Importer.import(data, exchange_rate_fetcher)
 end
 
-report = IbEstonia::TaxReport.new(trades)
-report.print
+puts 'Tabel 8.2'
+IbEstonia::Trades::TaxReport.new(trades).print

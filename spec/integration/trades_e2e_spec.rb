@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'exchange_rate_fetcher'
 
-describe 'E2E' do
+describe 'Trades E2E' do
   let(:exchange_rate_fetcher) { ExchangeRateFetcher.new }
 
   it 'generates tax report for simple stock sell' do
@@ -19,8 +19,8 @@ describe 'E2E' do
   end
 
   def tax_report(data)
-    trades = IbEstonia::Importer.import(data, exchange_rate_fetcher)
-    records = IbEstonia::TaxReport.new(trades).generate_tax_records
-    IbEstonia::EmtaFormatter.format(records)
+    trades = IbEstonia::Trades::Importer.import(data, exchange_rate_fetcher)
+    records = IbEstonia::Trades::TaxReport.new(trades).generate_tax_records
+    IbEstonia::Trades::EmtaFormatter.format(records)
   end
 end

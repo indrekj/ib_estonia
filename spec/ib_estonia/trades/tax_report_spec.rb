@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe IbEstonia::TaxReport do
+describe IbEstonia::Trades::TaxReport do
   it 'returns empty list when no trades' do
     expect(generate([])).to eq([])
   end
