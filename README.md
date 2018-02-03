@@ -6,7 +6,24 @@ IbEstonia is a converter which takes trade data from Interactive Brokers as an i
 
 ## Usage
 
-TODO
+### Download Trade Confirmation data
+
+1. Open Interactive Brokers Account Management.
+2. Go to Reports -> Trade Confirmations -> Flex Queries
+3. Create a Flex Query for each year since inception
+    1. Query Name: confirms-$YEAR
+    2. From Date: Beginning of $YEAR
+    3. To Date: End of $YEAR
+    4. Level of Details: Select "Symbol Summary" & "Execution"
+    5. Add all available fields to "Fields Included" list
+4. Execute and download all exports
+
+### Create report
+
+Create a report using the confirmation data. For example, if you have data for 2015-2017 then run:
+```sh
+./start confirms-2015.xml confirms-2016.xml confirms-2017.xml
+```
 
 ## Limitations
 
