@@ -8,14 +8,14 @@ describe 'E2E' do
     tax_records = tax_report(read_fixture('stock_sell.xml'))
 
     expect(tax_records.count).to eq(1)
-    expect(tax_records[0][0]).to eq('CRM: SALESFORCE.COM INC')
+    expect(tax_records[0][0]).to eq('EWZ: ISHARES MSCI BRAZIL CAPPED E')
     expect(tax_records[0][1]).to eq('aktsia')
-    expect(tax_records[0][2]).to eq(8)
-    expect(tax_records[0][3]).to eq('2017-05-22')
+    expect(tax_records[0][2]).to eq(60)
+    expect(tax_records[0][3]).to eq('2017-08-01')
     expect(tax_records[0][4]).to eq('TODO: country')
-    expect(tax_records[0][5]).to eq('544.72')
-    expect(tax_records[0][6]).to eq('0.35')
-    expect(tax_records[0][7]).to eq('630.86')
+    expect(tax_records[0][5]).to eq('1822.19')
+    expect(tax_records[0][6]).to eq('0.28')
+    expect(tax_records[0][7]).to eq('1895.20')
   end
 
   def tax_report(data)

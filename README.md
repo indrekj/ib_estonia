@@ -6,16 +6,17 @@ IbEstonia is a converter which takes trade data from Interactive Brokers as an i
 
 ## Usage
 
-### Download Trade Confirmation data
+### Download Trades & Dividends data
 
 1. Open Interactive Brokers Account Management.
-2. Go to Reports -> Trade Confirmations -> Flex Queries
-3. Create a Flex Query for each year since inception
-    1. Query Name: confirms-$YEAR
-    2. From Date: Beginning of $YEAR
-    3. To Date: End of $YEAR
-    4. Level of Details: Select "Symbol Summary" & "Execution"
-    5. Add all available fields to "Fields Included" list
+2. Go to Reports -> Flex Queries
+3. Create a new Custom Flex Query for each year **since account inception**.
+    1. Query Name: ib-$YEAR
+    2. Date Period: Custom Date Range
+    3. From Date: Beginning of $YEAR
+    4. To Date: End of $YEAR
+    5. Select "Trades", include all fields from "Symbol Summary" and "Executions"
+    6. Select "Change in Dividend Accruals", include all fields
 4. Execute and download all exports
 
 ### Create report

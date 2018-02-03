@@ -24,7 +24,7 @@ module IbEstonia
     end
 
     def self.fetch_stock_trades(doc, symbols)
-      doc.xpath("//TradeConfirm[@assetCategory='STK']")
+      doc.xpath("//Trade[@assetCategory='STK']")
         .map(&:attributes)
         .each do |record|
           record.each {|key, val| record[key] = val.value}
@@ -39,11 +39,11 @@ module IbEstonia
         end
         .map do |record|
           Stocks::Trade.new(
-            date: record['settleDate'],
+            date: record['settleDateTarget'],
             type: record['buySell'],
             quantity: record['quantity'].to_i.abs,
-            price: record['price'],
-            commission: BigDecimal(record['commission']).abs,
+            price: record['tradePrice'],
+            commission: BigDecimal(record['ibCommission']).abs,
             currency: record['currency'],
             symbol: symbols.detect {|symbol| symbol.name == record['symbol']}
           )
@@ -51,18 +51,18 @@ module IbEstonia
     end
 
     def self.fetch_option_trades(doc, symbols)
-      doc.xpath("//TradeConfirm[@assetCategory='OPT']")
+      doc.xpath("//Trade[@assetCategory='OPT']")
         .map(&:attributes)
         .each do |record|
           record.each {|key, val| record[key] = val.value}
         end
         .map do |record|
           Options::Trade.new(
-            date: record['settleDate'],
+            date: record['settleDateTarget'],
             type: record['buySell'],
             quantity: record['quantity'].to_i.abs,
-            price: record['price'],
-            commission: BigDecimal(record['commission']).abs,
+            price: record['tradePrice'],
+            commission: BigDecimal(record['ibCommission']).abs,
             currency: record['currency'],
             symbol: symbols.detect {|symbol| symbol.name == record['symbol']},
             strike: BigDecimal(record['strike']),
