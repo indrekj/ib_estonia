@@ -3,28 +3,13 @@ module IbEstonia
     class Importer
       def self.import(data, exchange_rate_fetcher)
         doc = Nokogiri::XML(data)
-        symbols = fetch_symbols(doc)
         (
-          fetch_stock_trades(doc, symbols) +
-          fetch_option_trades(doc, symbols)
+          fetch_stock_trades(doc) +
+          fetch_option_trades(doc)
         ).map {|trade| change_currency(trade, exchange_rate_fetcher)}
       end
 
-      def self.fetch_symbols(doc)
-        doc.xpath("//SymbolSummary")
-          .map(&:attributes)
-          .each do |record|
-            record.each {|key, val| record[key] = val.value}
-          end
-          .map do |record|
-            SymbolInfo.new(
-              name: record['symbol'],
-              description: record['description']
-            )
-          end
-      end
-
-      def self.fetch_stock_trades(doc, symbols)
+      def self.fetch_stock_trades(doc)
         doc.xpath("//Trade[@assetCategory='STK']")
           .map(&:attributes)
           .each do |record|
@@ -46,12 +31,15 @@ module IbEstonia
               price: record['tradePrice'],
               commission: BigDecimal(record['ibCommission']).abs,
               currency: record['currency'],
-              symbol: symbols.detect {|symbol| symbol.name == record['symbol']}
+              symbol: {
+                name: record['symbol'],
+                description: record['description']
+              }
             )
           end
       end
 
-      def self.fetch_option_trades(doc, symbols)
+      def self.fetch_option_trades(doc)
         doc.xpath("//Trade[@assetCategory='OPT']")
           .map(&:attributes)
           .each do |record|
@@ -65,7 +53,10 @@ module IbEstonia
               price: record['tradePrice'],
               commission: BigDecimal(record['ibCommission']).abs,
               currency: record['currency'],
-              symbol: symbols.detect {|symbol| symbol.name == record['symbol']},
+              symbol: {
+                name: record['symbol'],
+                description: record['description']
+              },
               strike: BigDecimal(record['strike']),
               multiplier: record['multiplier'].to_i
             )

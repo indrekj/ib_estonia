@@ -2,6 +2,8 @@
 
 IbEstonia is a converter which takes trade data from Interactive Brokers as an input and creates a tax report which can be easily submitted to Estonian Tax and Customs Board.
 
+It currently supports stocks, options & dividends. See *Limitations* section for known issues.
+
 **NB**: This project currently is **experimental**. It is not meant for production use yet.
 
 ## Usage
@@ -15,20 +17,22 @@ IbEstonia is a converter which takes trade data from Interactive Brokers as an i
     2. Date Period: Custom Date Range
     3. From Date: Beginning of $YEAR
     4. To Date: End of $YEAR
-    5. Select "Trades", include all fields from "Symbol Summary" and "Executions"
-    6. Select "Change in Dividend Accruals", include all fields
+    5. Select "Trades", include all fields from "Executions"
+    6. Select "Cash Transactions", include all fields from "Dividends" and "Withholding Tax"
+    7. Select "Financial Instrument Information", include all fields.
 4. Execute and download all exports
 
 ### Create report
 
 Create a report using the confirmation data. For example, if you have data for 2015-2017 then run:
 ```sh
-./start confirms-2015.xml confirms-2016.xml confirms-2017.xml
+./start ib-2015.xml ib-2016.xml ib-2017.xml
 ```
 
 ## Limitations
 
-* Currently basic stock and option trades are supported
+* Country of Issue missing from all reports
+* ISIN code missing from dividends report
 * Long positions that have changed to a short position or vice versa are not displayed correctly (e.g. BUY 10 $RP, SELL 20 $RP). However closing a position and opening a new works correctly (e.g. BUY 10 $RP, SELL 10 $RP, SELL 10 $RP).
 * Stock splits are not supported
-* Options exercising is not supported
+* Option premiums are not included in the stock price

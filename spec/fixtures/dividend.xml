@@ -1,0 +1,13 @@
+<FlexQueryResponse queryName="ib-2017" type="AF">
+<FlexStatements count="1">
+<FlexStatement accountId="ACCOUNT_ID" fromDate="20170102" toDate="20171229" period="" whenGenerated="20180203;154842">
+<CashTransactions>
+<CashTransaction accountId="ACCOUNT_ID" acctAlias="" model="" currency="USD" fxRateToBase="0.89434" assetCategory="STK" symbol="EWZ" description="EWZ(US4642864007) CASH DIVIDEND 0.27672400 USD PER SHARE - US TAX" conid="10753244" securityID="" securityIDType="" cusip="" isin="" listingExchange="ARCA" underlyingConid="" underlyingSymbol="" underlyingSecurityID="" underlyingListingExchange="" issuer="" multiplier="1" strike="" expiry="" putCall="" principalAdjustFactor="" dateTime="20170626" amount="-1.25" type="Withholding Tax" tradeID="" code="" transactionID="7753702243" reportDate="20170626" clientReference="" />
+<CashTransaction accountId="ACCOUNT_ID" acctAlias="" model="" currency="USD" fxRateToBase="0.89434" assetCategory="STK" symbol="EWZ" description="EWZ(US4642864007) CASH DIVIDEND 0.27672400 USD PER SHARE (Ordinary Dividend)" conid="10753244" securityID="" securityIDType="" cusip="" isin="" listingExchange="ARCA" underlyingConid="" underlyingSymbol="" underlyingSecurityID="" underlyingListingExchange="" issuer="" multiplier="1" strike="" expiry="" putCall="" principalAdjustFactor="" dateTime="20170626" amount="8.31" type="Dividends" tradeID="" code="" transactionID="7753702242" reportDate="20170626" clientReference="" />
+</CashTransactions>
+<SecuritiesInfo>
+<SecurityInfo assetCategory="STK" symbol="EWZ" description="ISHARES MSCI BRAZIL CAPPED E" conid="10753244" securityID="" securityIDType="" cusip="" isin="" listingExchange="ARCA" underlyingConid="" underlyingSymbol="" underlyingSecurityID="" underlyingListingExchange="" issuer="" multiplier="1" strike="" expiry="" putCall="" principalAdjustFactor="" maturity="" issueDate="" underlyingCategory="" subCategory="ETF" code="" />
+</SecuritiesInfo>
+</FlexStatement>
+</FlexStatements>
+</FlexQueryResponse>
