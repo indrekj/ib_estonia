@@ -17,8 +17,24 @@ module IbEstonia
           tax_record.date.strftime("%Y-%m-%d"),
           tax_record.currency,
           Format(tax_record.gross_amount),
-          withheld_tax(tax_record),
+          Format(tax_record.tax),
           withheld_tax_date(tax_record)
+        ]
+      end
+
+      def self.format_sum(tax_records)
+        total_gross_amount = tax_records.sum(&:gross_amount)
+        total_witheld_tax = tax_records.sum(&:tax)
+        [
+          nil,
+          nil,
+          nil,
+          nil,
+          nil,
+          nil,
+          Format(total_gross_amount),
+          Format(total_witheld_tax),
+          nil
         ]
       end
 
@@ -29,10 +45,6 @@ module IbEstonia
 
       def self.country(tax_record)
         "TODO: country"
-      end
-
-      def self.withheld_tax(tax_record)
-        Format(tax_record.tax)
       end
 
       def self.withheld_tax_date(tax_record)

@@ -40,9 +40,12 @@ module IbEstonia
       end
 
       def print
-        table = Terminal::Table.new(
-          rows: EmtaFormatter.format(generate_tax_records)
-        )
+        records = generate_tax_records
+
+        table = Terminal::Table.new(rows: EmtaFormatter.format(records))
+        table.add_separator
+        table.add_row(EmtaFormatter.format_sum(records))
+
         puts table
       end
     end

@@ -15,10 +15,27 @@ module IbEstonia
           tax_record.quantity,
           tax_record.date.strftime("%Y-%m-%d"),
           country(tax_record),
-          open_amount(tax_record),
-          close_commission(tax_record),
-          close_amount(tax_record),
+          Format(open_amount(tax_record)),
+          Format(close_commission(tax_record)),
+          Format(close_amount(tax_record)),
           0
+        ]
+      end
+
+      def self.format_sum(tax_records)
+        total_open_amount = tax_records.sum(&method(:open_amount))
+        total_close_commision = tax_records.sum(&method(:close_commission))
+        total_close_amount = tax_records.sum(&method(:close_amount))
+        [
+          nil,
+          nil,
+          nil,
+          nil,
+          nil,
+          Format(total_open_amount),
+          Format(total_close_commision),
+          Format(total_close_amount),
+          nil
         ]
       end
 
@@ -48,25 +65,25 @@ module IbEstonia
 
       def self.open_amount(tax_record)
         if tax_record.closing_long?
-          Format(tax_record.open_amount + tax_record.open_commission)
+          tax_record.open_amount + tax_record.open_commission
         else
-          Format(tax_record.close_amount + tax_record.close_commission)
+          tax_record.close_amount + tax_record.close_commission
         end
       end
 
       def self.close_amount(tax_record)
         if tax_record.closing_long?
-          Format(tax_record.close_amount)
+          tax_record.close_amount
         else
-          Format(tax_record.open_amount)
+          tax_record.open_amount
         end
       end
 
       def self.close_commission(tax_record)
         if tax_record.closing_long?
-          Format(tax_record.close_commission)
+          tax_record.close_commission
         else
-          Format(tax_record.open_commission)
+          tax_record.open_commission
         end
       end
     end
