@@ -18,7 +18,7 @@ module IbEstonia
           open_amount(tax_record),
           close_commission(tax_record),
           close_amount(tax_record),
-          0
+          withheld_tax(tax_record)
         ].map(&method(:Format))
       end
 
@@ -85,6 +85,10 @@ module IbEstonia
         else
           tax_record.open_commission
         end
+      end
+
+      def self.withheld_tax(_tax_record)
+        0
       end
     end
   end
