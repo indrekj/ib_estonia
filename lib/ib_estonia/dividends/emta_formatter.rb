@@ -16,10 +16,10 @@ module IbEstonia
           'dividend',
           tax_record.date.strftime("%Y-%m-%d"),
           tax_record.currency,
-          Format(tax_record.gross_amount),
-          Format(tax_record.tax),
+          tax_record.gross_amount,
+          tax_record.tax,
           withheld_tax_date(tax_record)
-        ]
+        ].map(&method(:Format))
       end
 
       def self.format_sum(tax_records)
@@ -32,10 +32,10 @@ module IbEstonia
           nil,
           nil,
           nil,
-          Format(total_gross_amount),
-          Format(total_witheld_tax),
+          total_gross_amount,
+          total_witheld_tax,
           nil
-        ]
+        ].map(&method(:Format))
       end
 
       def self.name(tax_record)

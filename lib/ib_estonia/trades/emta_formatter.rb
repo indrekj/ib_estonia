@@ -15,11 +15,11 @@ module IbEstonia
           tax_record.quantity,
           tax_record.date.strftime("%Y-%m-%d"),
           country(tax_record),
-          Format(open_amount(tax_record)),
-          Format(close_commission(tax_record)),
-          Format(close_amount(tax_record)),
+          open_amount(tax_record),
+          close_commission(tax_record),
+          close_amount(tax_record),
           0
-        ]
+        ].map(&method(:Format))
       end
 
       def self.format_sum(tax_records)
@@ -32,11 +32,11 @@ module IbEstonia
           nil,
           nil,
           nil,
-          Format(total_open_amount),
-          Format(total_close_commision),
-          Format(total_close_amount),
+          total_open_amount,
+          total_close_commision,
+          total_close_amount,
           nil
-        ]
+        ].map(&method(:Format))
       end
 
       def self.security_type(tax_record)
