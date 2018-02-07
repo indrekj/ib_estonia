@@ -10,7 +10,7 @@ module IbEstonia
 
       def self.format_record(tax_record)
         [
-          'TODO: ISIN',
+          tax_record.symbol.isin || 'ISIN NOT FOUND',
           name(tax_record),
           country(tax_record),
           'dividend',
@@ -44,7 +44,11 @@ module IbEstonia
       end
 
       def self.country(tax_record)
-        "TODO: country"
+        if isin = tax_record.symbol.isin
+          isin[0...2]
+        else
+          'COUNTRY NOT FOUND'
+        end
       end
 
       def self.withheld_tax_date(tax_record)

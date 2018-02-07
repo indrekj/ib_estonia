@@ -3,13 +3,29 @@ module IbEstonia
     class Importer
       def self.import(data, exchange_rate_fetcher)
         doc = Nokogiri::XML(data)
+        symbols = fetch_symbols(doc)
         (
-          fetch_stock_trades(doc) +
-          fetch_option_trades(doc)
+          fetch_stock_trades(doc, symbols) +
+          fetch_option_trades(doc, symbols)
         ).map {|trade| change_currency(trade, exchange_rate_fetcher)}
       end
 
-      def self.fetch_stock_trades(doc)
+      def self.fetch_symbols(doc)
+        doc.xpath("//SecurityInfo")
+          .map(&:attributes)
+          .each do |record|
+            record.each {|key, val| record[key] = val.value}
+          end
+          .map do |record|
+            SymbolInfo.new(
+              name: record['symbol'],
+              description: record['description'],
+              isin: presence(record['isin'])
+            )
+          end
+      end
+
+      def self.fetch_stock_trades(doc, symbols)
         doc.xpath("//Trade[@assetCategory='STK']")
           .map(&:attributes)
           .each do |record|
@@ -31,15 +47,12 @@ module IbEstonia
               price: record['tradePrice'],
               commission: BigDecimal(record['ibCommission']).abs,
               currency: record['currency'],
-              symbol: {
-                name: record['symbol'],
-                description: record['description']
-              }
+              symbol: symbols.detect {|symbol| symbol.name == record['symbol']}
             )
           end
       end
 
-      def self.fetch_option_trades(doc)
+      def self.fetch_option_trades(doc, symbols)
         doc.xpath("//Trade[@assetCategory='OPT']")
           .map(&:attributes)
           .each do |record|
@@ -53,10 +66,7 @@ module IbEstonia
               price: record['tradePrice'],
               commission: BigDecimal(record['ibCommission']).abs,
               currency: record['currency'],
-              symbol: {
-                name: record['symbol'],
-                description: record['description']
-              },
+              symbol: symbols.detect {|symbol| symbol.name == record['symbol']},
               strike: BigDecimal(record['strike']),
               multiplier: record['multiplier'].to_i
             )
@@ -79,6 +89,10 @@ module IbEstonia
             date: trade.date
           )
         )
+      end
+
+      def self.presence(str)
+        str.empty? ? nil : str
       end
     end
   end

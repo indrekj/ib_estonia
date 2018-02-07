@@ -19,7 +19,8 @@ module IbEstonia
           .map do |record|
             SymbolInfo.new(
               name: record['symbol'],
-              description: record['description']
+              description: record['description'],
+              isin: presence(record['isin'])
             )
           end
       end
@@ -54,6 +55,10 @@ module IbEstonia
               symbol: symbols.detect {|symbol| symbol.name == record['symbol']}
             )
           end
+      end
+
+      def self.presence(str)
+        str.empty? ? nil : str
       end
     end
   end

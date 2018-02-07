@@ -60,7 +60,11 @@ module IbEstonia
       end
 
       def self.country(tax_record)
-        "TODO: country"
+        if isin = tax_record.symbol.isin
+          isin[0...2]
+        else
+          'COUNTRY NOT FOUND'
+        end
       end
 
       def self.open_amount(tax_record)

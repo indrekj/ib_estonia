@@ -5,9 +5,9 @@ describe 'Dividends E2E' do
     tax_records = tax_report(read_fixture('dividend.xml'))
 
     expect(tax_records.count).to eq(1)
-    expect(tax_records[0][0]).to eq('TODO: ISIN')
+    expect(tax_records[0][0]).to eq('ISIN NOT FOUND')
     expect(tax_records[0][1]).to eq('EWZ: ISHARES MSCI BRAZIL CAPPED E')
-    expect(tax_records[0][2]).to eq('TODO: country')
+    expect(tax_records[0][2]).to eq('COUNTRY NOT FOUND')
     expect(tax_records[0][3]).to eq('dividend')
     expect(tax_records[0][4]).to eq('2017-06-26')
     expect(tax_records[0][5]).to eq('USD')
