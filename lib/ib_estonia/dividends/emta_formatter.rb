@@ -12,7 +12,7 @@ module IbEstonia
         [
           tax_record.symbol.isin || 'ISIN NOT FOUND',
           name(tax_record),
-          country(tax_record),
+          tax_record.symbol.country,
           'dividend',
           tax_record.date.strftime("%Y-%m-%d"),
           tax_record.currency,
@@ -41,14 +41,6 @@ module IbEstonia
       def self.name(tax_record)
         symbol = tax_record.symbol
         "#{symbol.name}: #{symbol.description}"
-      end
-
-      def self.country(tax_record)
-        if isin = tax_record.symbol.isin
-          isin[0...2]
-        else
-          'COUNTRY NOT FOUND'
-        end
       end
 
       def self.withheld_tax_date(tax_record)

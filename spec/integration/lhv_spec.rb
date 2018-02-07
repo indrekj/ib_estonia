@@ -38,7 +38,7 @@ describe 'LHV' do
     expect(tax_records[0][1]).to eq('aktsia')
     expect(tax_records[0][2]).to eq(150)
     expect(tax_records[0][3]).to eq('2011-11-04')
-    expect(tax_records[0][4]).to eq('COUNTRY NOT FOUND') # USA
+    expect(tax_records[0][4]).to eq('US') # LHV has USA, but should be fine
     expect(tax_records[0][5]).to eq('2648.32') # LHV had 2648.25
     expect(tax_records[0][6]).to eq('19.94')   # LhV had 19.95
     expect(tax_records[0][7]).to eq('3058.16')
@@ -72,7 +72,7 @@ describe 'LHV' do
     expect(tax_records[0][1]).to eq('optsioon')
     expect(tax_records[0][2]).to eq(2)
     expect(tax_records[0][3]).to eq('2011-08-02')
-    expect(tax_records[0][4]).to eq('COUNTRY NOT FOUND') # USA
+    expect(tax_records[0][4]).to eq('US') # LHV has USA, but should be fine
     expect(tax_records[0][5]).to eq('388.00')
     expect(tax_records[0][6]).to eq('8.00')
     expect(tax_records[0][7]).to eq('400.00')

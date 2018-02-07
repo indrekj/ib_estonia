@@ -14,7 +14,7 @@ module IbEstonia
           security_type(tax_record),
           tax_record.quantity,
           tax_record.date.strftime("%Y-%m-%d"),
-          country(tax_record),
+          tax_record.symbol.country,
           open_amount(tax_record),
           close_commission(tax_record),
           close_amount(tax_record),
@@ -56,14 +56,6 @@ module IbEstonia
           "#{symbol.name}: #{symbol.description}"
         else
           "#{symbol.name}: #{symbol.description}**"
-        end
-      end
-
-      def self.country(tax_record)
-        if isin = tax_record.symbol.isin
-          isin[0...2]
-        else
-          'COUNTRY NOT FOUND'
         end
       end
 

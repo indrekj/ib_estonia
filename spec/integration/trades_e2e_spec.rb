@@ -12,7 +12,7 @@ describe 'Trades E2E' do
     expect(tax_records[0][1]).to eq('aktsia')
     expect(tax_records[0][2]).to eq(60)
     expect(tax_records[0][3]).to eq('2017-08-01')
-    expect(tax_records[0][4]).to eq('COUNTRY NOT FOUND')
+    expect(tax_records[0][4]).to eq('US')
     expect(tax_records[0][5]).to eq('1822.19')
     expect(tax_records[0][6]).to eq('0.28')
     expect(tax_records[0][7]).to eq('1895.20')
