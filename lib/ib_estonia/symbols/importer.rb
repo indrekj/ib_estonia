@@ -13,16 +13,21 @@ module IbEstonia
             record.each {|key, val| record[key] = val.value}
           end
           .map do |record|
+            isin =
+              if !record['isin'].empty?
+                record['isin']
+              elsif record['assetCategory'] == 'STK'
+                isin_fetcher.fetch(record['symbol'])
+              elsif record['assetCategory'] == 'OPT'
+                isin_fetcher.fetch(record['underlyingSymbol'])
+              end
+
             SymbolInfo.new(
               name: record['symbol'],
               description: record['description'],
-              isin: presence(record['isin']) || isin_fetcher.fetch(record['symbol'])
+              isin: isin
             )
           end
-      end
-
-      def self.presence(str)
-        str.empty? ? nil : str
       end
     end
   end

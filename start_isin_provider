@@ -1,0 +1,3 @@
+#!/usr/bin/env sh
+
+cd isin_provider && npm install && node server.js

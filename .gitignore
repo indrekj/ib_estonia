@@ -1,2 +1,4 @@
 /*.xml
 rate_cache
+isin_cache
+isin_provider/node_modules
