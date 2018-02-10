@@ -8,12 +8,8 @@ module IbEstonia
       attribute :isin, String
     end
 
-    # From https://www.interactivebrokers.com/en/software/reportguide/reportguide/financialinstrumentinformationfq.htm
-    #   CUSIP information is available only if you are subscribed to the CUSIP
-    #   Service market data subscription, but ISIN will appear for non-US
-    #   products and other products where applicable.
     def country
-      isin ? isin[0...2] : 'US'
+      isin ? isin[0...2] : nil
     end
   end
 end

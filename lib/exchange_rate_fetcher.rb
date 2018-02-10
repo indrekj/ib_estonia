@@ -33,6 +33,7 @@ class ExchangeRateFetcher
   end
 
   def fetch_from_api(from, to, date)
+    puts ">>> Fetching #{from}#{to} rate for #{date}"
     response = HTTParty.get("https://api.fixer.io/#{date}?base=#{from}&symbols=#{to}")
     response.parsed_response['rates'][to]
   end

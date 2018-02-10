@@ -12,7 +12,7 @@ module IbEstonia
         [
           tax_record.symbol.isin || 'ISIN NOT FOUND',
           name(tax_record),
-          tax_record.symbol.country,
+          tax_record.symbol.country || 'COUNTRY NOT FOUND',
           'dividend',
           tax_record.date.strftime("%Y-%m-%d"),
           tax_record.currency,

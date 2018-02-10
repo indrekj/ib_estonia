@@ -50,7 +50,7 @@ describe IbEstonia::Dividends::TaxReport do
       date: next_day.strftime("%Y%m%d"),
       gross_amount: 10.0,
       currency: 'USD',
-      symbol: {name: 'VOO', description: 'S&P500'}
+      symbol: {name: 'VOO', description: 'S&P500', isin: 'US9229083632'}
     }.merge(opts))
   end
 
@@ -59,7 +59,7 @@ describe IbEstonia::Dividends::TaxReport do
       date: next_day.strftime("%Y%m%d"),
       amount: 2.0,
       currency: 'USD',
-      symbol: {name: 'VOO', description: 'S&P500'}
+      symbol: {name: 'VOO', description: 'S&P500', isin: 'US9229083632'}
     }.merge(opts))
   end
 end

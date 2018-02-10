@@ -6,6 +6,8 @@ require_relative './ib_estonia/format'
 require_relative './ib_estonia/security_type'
 require_relative './ib_estonia/symbol_info'
 
+require_relative './ib_estonia/symbols/importer'
+
 require_relative './ib_estonia/trades/importer'
 require_relative './ib_estonia/trades/tax_report'
 require_relative './ib_estonia/trades/tax_record'

@@ -19,7 +19,9 @@ describe 'Trades E2E' do
   end
 
   def tax_report(data)
-    trades = IbEstonia::Trades::Importer.import(data, exchange_rate_fetcher)
+    isin_fetcher = double(fetch: 'US4642864007')
+    symbols = IbEstonia::Symbols::Importer.import(data, isin_fetcher)
+    trades = IbEstonia::Trades::Importer.import(data, symbols, exchange_rate_fetcher)
     records = IbEstonia::Trades::TaxReport.new(trades).generate_tax_records
     IbEstonia::Trades::EmtaFormatter.format(records)
   end

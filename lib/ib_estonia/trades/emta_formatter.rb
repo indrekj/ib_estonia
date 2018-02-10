@@ -14,7 +14,7 @@ module IbEstonia
           security_type(tax_record),
           tax_record.quantity,
           tax_record.date.strftime("%Y-%m-%d"),
-          tax_record.symbol.country,
+          tax_record.symbol.country || 'COUNTRY NOT FOUND',
           open_amount(tax_record),
           close_commission(tax_record),
           close_amount(tax_record),

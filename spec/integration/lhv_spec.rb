@@ -9,23 +9,28 @@ require 'spec_helper'
 # formatting already calculated tax records.
 describe 'LHV' do
   it 'tests selling stocks in multiple chunks' do
+    symbol = {
+      name: 'MSFT',
+      description: 'Microsoft Corporation',
+      isin: 'US5949181045'
+    }
     tax_records = generate([
       buy_stock(
-        symbol: {name: 'MSFT', description: 'Microsoft Corporation'},
+        symbol: symbol,
         date: '20110319',
         quantity: 100,
         price: to_eur(BigDecimal('24.86'), 1.413),
         commission: to_eur(BigDecimal('22.29'), 1.413)
       ),
       buy_stock(
-        symbol: {name: 'MSFT', description: 'Microsoft Corporation'},
+        symbol: symbol,
         date: '20110326',
         quantity: 200,
         price: to_eur(BigDecimal('24.50'), 1.4114),
         commission: to_eur(BigDecimal('29.53'), 1.4114)
       ),
       sell_stock(
-        symbol: {name: 'MSFT', description: 'Microsoft Corporation'},
+        symbol: symbol,
         date: '20111104',
         quantity: 150,
         price: to_eur(BigDecimal('28.08'), 1.3773),
@@ -47,7 +52,11 @@ describe 'LHV' do
   it 'tests exercising call option' do
     tax_records = generate([
       buy_call(
-        symbol: {name: 'CBMWAUG117200', description: 'BMW call Aug 2011 72'},
+        symbol: {
+          name: 'CBMWAUG117200',
+          description: 'BMW call Aug 2011 72',
+          isin: 'US123'
+        },
         date: '20110801',
         quantity: 4,
         multiplier: 100,
@@ -56,7 +65,11 @@ describe 'LHV' do
         commission: BigDecimal('16.0')
       ),
       sell_call(
-        symbol: {name: 'CBMWAUG117200', description: 'BMW call Aug 2011 72'},
+        symbol: {
+          name: 'CBMWAUG117200',
+          description: 'BMW call Aug 2011 72',
+          isin: 'US123'
+        },
         date: '20110802',
         quantity: 2,
         multiplier: 100,

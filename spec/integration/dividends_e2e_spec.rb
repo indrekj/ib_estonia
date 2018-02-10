@@ -5,7 +5,7 @@ describe 'Dividends E2E' do
     tax_records = tax_report(read_fixture('dividend.xml'))
 
     expect(tax_records.count).to eq(1)
-    expect(tax_records[0][0]).to eq('ISIN NOT FOUND')
+    expect(tax_records[0][0]).to eq('US4642864007')
     expect(tax_records[0][1]).to eq('EWZ: ISHARES MSCI BRAZIL CAPPED E')
     expect(tax_records[0][2]).to eq('US')
     expect(tax_records[0][3]).to eq('dividend')
@@ -16,7 +16,9 @@ describe 'Dividends E2E' do
   end
 
   def tax_report(data)
-    records = IbEstonia::Dividends::Importer.import(data)
+    isin_fetcher = double(fetch: 'US4642864007')
+    symbols = IbEstonia::Symbols::Importer.import(data, isin_fetcher)
+    records = IbEstonia::Dividends::Importer.import(data, symbols)
     report = IbEstonia::Dividends::TaxReport.new(records).generate_tax_records
     IbEstonia::Dividends::EmtaFormatter.format(report)
   end
