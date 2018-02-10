@@ -53,8 +53,8 @@ http.createServer(function (req, res) {
 
   res.writeHead(200, {'Content-Type': 'text/plain'});
 
-	if (queryData.symbol) {
-	  requestISIN(queryData.symbol, isin => res.end(isin));
+  if (queryData.symbol) {
+    requestISIN(queryData.symbol, isin => res.end(isin));
   } else {
     res.end('Please provide `symbol` as a query parameter');
   }
