@@ -1,3 +1,8 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
-cd isin_provider && npm install && node server.js
+set -e
+cd "$( dirname "${BASH_SOURCE[0]}" )" # cd to the script's folder
+
+cd isin_provider
+npm install
+node server.js
