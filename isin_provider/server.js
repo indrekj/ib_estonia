@@ -26,16 +26,13 @@ ib.connect();
 
 let lastReqId = 1;
 
-function requestISIN(symbol, cb) {
+function requestISIN(contractId, cb) {
   const reqId = lastReqId;
   lastReqId++;
 
-  console.log(`Requesting ISIN for ${symbol}, reqId: ${reqId}`);
+  console.log(`Requesting ISIN for ${contractId}, reqId: ${reqId}`);
 
-  // ib.contract.stock takes symbol, exchange and currency. It however looks
-  // that we get correct responses by only providing a symbol. It likely
-  // default to SMART exchange.
-  const contract = ib.contract.stock(symbol);
+  const contract = {conId: parseInt(contractId, 10)};
   ib.reqContractDetails(reqId, contract);
   responseCallbacks[reqId] = cb;
 
@@ -53,10 +50,10 @@ http.createServer(function (req, res) {
 
   res.writeHead(200, {'Content-Type': 'text/plain'});
 
-  if (queryData.symbol) {
-    requestISIN(queryData.symbol, isin => res.end(isin));
+  if (queryData.contract_id) {
+    requestISIN(queryData.contract_id, isin => res.end(isin));
   } else {
-    res.end('Please provide `symbol` as a query parameter');
+    res.end('Please provide `contract_id` as a query parameter');
   }
 }).listen(PORT);
 

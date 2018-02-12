@@ -17,9 +17,9 @@ module IbEstonia
               if !record['isin'].empty?
                 record['isin']
               elsif record['assetCategory'] == 'STK'
-                isin_fetcher.fetch(record['symbol'])
+                isin_fetcher.fetch(record['conid'])
               elsif record['assetCategory'] == 'OPT'
-                isin_fetcher.fetch(record['underlyingSymbol'])
+                isin_fetcher.fetch(record['underlyingConid'])
               end
 
             SymbolInfo.new(

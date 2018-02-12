@@ -11,12 +11,12 @@ class IsinFetcher
       end
   end
 
-  def fetch(symbol_name)
-    if isin = @cache[symbol_name]
+  def fetch(contract_id)
+    if isin = @cache[contract_id]
       isin
     else
-      isin = fetch_from_api(symbol_name)
-      @cache[symbol_name] = isin
+      isin = fetch_from_api(contract_id)
+      @cache[contract_id] = isin
       save_cache
       isin
     end
@@ -24,9 +24,9 @@ class IsinFetcher
 
   private
 
-  def fetch_from_api(symbol_name)
-    puts ">>> Fetching ISIN for #{symbol_name}"
-    response = HTTParty.get("#{ENDPOINT}/?symbol=#{symbol_name}")
+  def fetch_from_api(contract_id)
+    puts ">>> Fetching ISIN for Contract ##{contract_id}"
+    response = HTTParty.get("#{ENDPOINT}/?contract_id=#{contract_id}")
     if response.code == 200
       response.body
     else
