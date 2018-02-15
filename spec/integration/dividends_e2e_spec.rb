@@ -9,7 +9,7 @@ describe 'Dividends E2E' do
     expect(tax_records[0][1]).to eq('EWZ: ISHARES MSCI BRAZIL CAPPED E')
     expect(tax_records[0][2]).to eq('US')
     expect(tax_records[0][3]).to eq('dividend')
-    expect(tax_records[0][4]).to eq('2017-06-26')
+    expect(tax_records[0][4]).to eq('26.06.2017')
     expect(tax_records[0][5]).to eq('USD')
     expect(tax_records[0][6]).to eq('8.31')
     expect(tax_records[0][7]).to eq('1.25')

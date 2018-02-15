@@ -14,7 +14,7 @@ module IbEstonia
           name(tax_record),
           tax_record.symbol.country || 'COUNTRY NOT FOUND',
           'dividend',
-          tax_record.date.strftime("%Y-%m-%d"),
+          tax_record.date.strftime("%d.%m.%Y"),
           tax_record.currency,
           tax_record.gross_amount,
           tax_record.tax,
@@ -44,7 +44,7 @@ module IbEstonia
       end
 
       def self.withheld_tax_date(tax_record)
-        tax_record.date
+        tax_record.date.strftime('%d.%m.%Y')
       end
     end
   end
