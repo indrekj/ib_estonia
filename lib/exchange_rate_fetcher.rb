@@ -1,46 +1,55 @@
-require 'httparty'
+require 'nokogiri'
+require 'net/http'
 
 class ExchangeRateFetcher
-  def initialize
-    @cache_path = File.dirname(__FILE__) + "/../rate_cache"
-    @cache =
-      if File.exists?(@cache_path)
-        JSON.parse(File.read(@cache_path))
-      else
-        {}
-      end
+  HISTORICAL_URL = 'https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist.xml'.freeze
+
+  def initialize(xml_db = Net::HTTP.get(URI.parse(HISTORICAL_URL)))
+    @db = prepare(xml_db)
   end
 
   def convert(amount:, from:, to:, date:)
     rate = fetch_rate(from, to, date)
-    amount * rate
+    amount / rate
   end
+
+  private
 
   def fetch_rate(from, to, date)
-    date = date.strftime("%Y-%m-%d")
+    return 1.0 if from == to
+    raise 'Exchange rate fetcher works only if target is EUR' if to != 'EUR'
 
-    @cache[date] ||= {}
-    @cache[date][from] ||= {}
+    date = date.to_date if date.is_a?(Time)
 
-    if rate = @cache[date][from][to]
-      rate
-    else
-      rate = fetch_from_api(from, to, date)
-      @cache[date][from][to] = rate
-      save_cache
-      rate
-    end
+    BigDecimal(exchange_rates_for_day(date).fetch(from))
   end
 
-  def fetch_from_api(from, to, date)
-    puts ">>> Fetching #{from}#{to} rate for #{date}"
-    response = HTTParty.get("https://api.fixer.io/#{date}?base=#{from}&symbols=#{to}")
-    response.parsed_response['rates'][to]
+  # Exchange rates are not published for dates that are holidays. In that case
+  # the previous rate must be returned.
+  def exchange_rates_for_day(date)
+    key = date.strftime("%Y-%m-%d")
+    return @db.fetch(key) if @db.key?(key)
+
+    exchange_rates_for_day(date.prev_day)
   end
 
-  def save_cache
-    File.open(@cache_path, 'w+') do |file|
-      file.write(JSON.dump(@cache))
+  def prepare(xml_db)
+    db = {}
+
+    doc = Nokogiri::XML(xml_db)
+    doc.remove_namespaces!
+    doc.xpath('Envelope/Cube/Cube[@time]').each do |date_element|
+      date = date_element.attr('time')
+      db[date] = {}
+
+      date_element.xpath('Cube').each do |currency_element|
+        currency = currency_element.attr('currency')
+        rate = currency_element.attr('rate')
+
+        db[date][currency] = rate
+      end
     end
+
+    db
   end
 end

@@ -1,3 +1,5 @@
+require 'json'
+
 class IsinFetcher
   ENDPOINT = 'http://localhost:7633'
 
