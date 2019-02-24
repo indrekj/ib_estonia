@@ -20,7 +20,7 @@ module IbEstonia
               date: record['reportDate'],
               gross_amount: record['amount'],
               currency: record['currency'],
-              symbol: symbols.detect {|symbol| symbol.name == record['symbol']}
+              symbol: symbols.detect {|symbol| symbol.conid == record['conid']}
             )
           end
       end
@@ -36,7 +36,7 @@ module IbEstonia
               date: record['reportDate'],
               amount: BigDecimal(record['amount']).abs,
               currency: record['currency'],
-              symbol: symbols.detect {|symbol| symbol.name == record['symbol']}
+              symbol: symbols.detect {|symbol| symbol.conid == record['conid']}
             )
           end
       end

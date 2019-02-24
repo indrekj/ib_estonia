@@ -25,6 +25,7 @@ module IbEstonia
             SymbolInfo.new(
               name: record['symbol'],
               description: record['description'],
+              conid: record['conid'],
               isin: isin
             )
           end

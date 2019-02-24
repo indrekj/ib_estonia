@@ -6,6 +6,7 @@ module IbEstonia
       attribute :name, String
       attribute :description, String
       attribute :isin, String
+      attribute :conid, String
     end
 
     def country
