@@ -12,6 +12,14 @@ const ib = new IB({
 }).on('contractDetails', (reqId, data) => {
   console.log(`Got contract details for request ${reqId}`)
 
+  if (!data.secIdList) {
+    console.warn('Did not find secIdList in the Contract Details. ' +
+      'You may need to enable CUSIP subscription in IB under Research Subscriptions', data);
+    responseCallbacks[reqId](null);
+    delete responseCallbacks[reqId];
+    return;
+  };
+
   const id = data.secIdList.find(({tag, value}) => tag === 'ISIN');
   if (id) {
     console.log(`Found ISIN for request ${reqId}, ${data.summary.symbol}: ${id.value}`);
