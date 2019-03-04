@@ -19,7 +19,9 @@ class IsinFetcher
       isin
     else
       isin = fetch_from_api(contract_id)
-      @cache[contract_id] = isin
+      isin = nil if isin == ''
+
+      @cache[contract_id] = isin if isin
       save_cache
       isin
     end
