@@ -42,9 +42,15 @@ module IbEstonia
       def print
         records = generate_tax_records
 
-        table = Terminal::Table.new(rows: EmtaFormatter.format(records))
-        table.add_separator
-        table.add_row(EmtaFormatter.format_sum(records))
+        table = Terminal::Table.new
+
+        records
+          .group_by {|record| record.date.year}
+          .sort_by {|year, _| year}
+          .each do |year, records|
+            EmtaFormatter.format(records).each(&table.method(:add_row))
+            table.add_separator
+          end
 
         puts table
       end

@@ -22,22 +22,6 @@ module IbEstonia
         ].map(&method(:Format))
       end
 
-      def self.format_sum(tax_records)
-        total_gross_amount = tax_records.sum(&:gross_amount)
-        total_witheld_tax = tax_records.sum(&:tax)
-        [
-          nil,
-          nil,
-          nil,
-          nil,
-          nil,
-          nil,
-          total_gross_amount,
-          total_witheld_tax,
-          nil
-        ].map(&method(:Format))
-      end
-
       def self.name(tax_record)
         symbol = tax_record.symbol
         "#{symbol.name}: #{symbol.description}"
