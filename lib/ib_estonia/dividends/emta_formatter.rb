@@ -22,6 +22,27 @@ module IbEstonia
         ].map(&method(:Format))
       end
 
+      def self.format_sum_in_euros(tax_records, exchange_rate_fetcher)
+        total_gross_amount = tax_records.sum do |tax_record|
+          in_euros(tax_record, :gross_amount, exchange_rate_fetcher)
+        end
+        total_witheld_tax = tax_records.sum do |tax_record|
+          in_euros(tax_record, :tax, exchange_rate_fetcher)
+        end
+
+        [
+          nil,
+          nil,
+          nil,
+          nil,
+          'IN EUROS:',
+          nil,
+          total_gross_amount,
+          total_witheld_tax,
+          nil
+        ].map(&method(:Format))
+      end
+
       def self.name(tax_record)
         symbol = tax_record.symbol
         "#{symbol.name}: #{symbol.description}"
@@ -29,6 +50,15 @@ module IbEstonia
 
       def self.withheld_tax_date(tax_record)
         tax_record.date.strftime('%d.%m.%Y')
+      end
+
+      def self.in_euros(tax_record, field, exchange_rate_fetcher)
+        exchange_rate_fetcher.convert(
+          amount: tax_record.public_send(field),
+          from: tax_record.currency,
+          to: 'EUR',
+          date: tax_record.date
+        )
       end
     end
   end

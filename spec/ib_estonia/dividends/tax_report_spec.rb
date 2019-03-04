@@ -42,7 +42,8 @@ describe IbEstonia::Dividends::TaxReport do
   end
 
   def generate(trades)
-    described_class.new(trades).generate_tax_records
+    exchange_rate_fetcher = double
+    described_class.new(trades, exchange_rate_fetcher).generate_tax_records
   end
 
   def generate_dividend(opts)

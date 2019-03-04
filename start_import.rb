@@ -36,4 +36,4 @@ IbEstonia::Trades::TaxReport.new(trades).print
 
 puts
 puts 'Tabel 8.8'
-IbEstonia::Dividends::TaxReport.new(dividends).print
+IbEstonia::Dividends::TaxReport.new(dividends, exchange_rate_fetcher).print

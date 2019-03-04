@@ -1,9 +1,10 @@
 module IbEstonia
   module Dividends
     class TaxReport
-      def initialize(records)
+      def initialize(records, exchange_rate_fetcher)
         @accruals = records.select {|r| r.is_a?(Dividend)}
         @withholding_taxes = records.select {|r| r.is_a?(WithholdingTax)}
+        @exchange_rate_fetcher = exchange_rate_fetcher
       end
 
       def generate_tax_records
@@ -49,6 +50,8 @@ module IbEstonia
           .sort_by {|year, _| year}
           .each do |year, records|
             EmtaFormatter.format(records).each(&table.method(:add_row))
+            table.add_separator
+            table.add_row(EmtaFormatter.format_sum_in_euros(records, @exchange_rate_fetcher))
             table.add_separator
           end
 

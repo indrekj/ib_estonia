@@ -17,9 +17,11 @@ describe 'Dividends E2E' do
 
   def tax_report(data)
     isin_fetcher = double(fetch: 'US4642864007')
+    exchange_rate_fetcher = double
     symbols = IbEstonia::Symbols::Importer.import(data, isin_fetcher)
     records = IbEstonia::Dividends::Importer.import(data, symbols)
-    report = IbEstonia::Dividends::TaxReport.new(records).generate_tax_records
+    report = IbEstonia::Dividends::TaxReport.new(records, exchange_rate_fetcher)
+      .generate_tax_records
     IbEstonia::Dividends::EmtaFormatter.format(report)
   end
 end
