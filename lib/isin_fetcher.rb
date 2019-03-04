@@ -1,4 +1,5 @@
 require 'json'
+require 'httparty'
 
 class IsinFetcher
   ENDPOINT = 'http://localhost:7633'
