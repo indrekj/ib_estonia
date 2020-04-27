@@ -10,6 +10,7 @@ module IbEstonia
 
       def self.format_record(tax_record)
         [
+          tax_record.symbol.isin || 'ISIN NOT FOUND',
           name(tax_record),
           security_type(tax_record),
           tax_record.quantity,
