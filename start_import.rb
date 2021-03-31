@@ -30,10 +30,16 @@ dividends = ARGV.reduce([]) do |acc, path|
   acc + IbEstonia::Dividends::Importer.import(data, symbols)
 end
 
+dividends_report = IbEstonia::Dividends::TaxReport.new(dividends, exchange_rate_fetcher)
+
 puts
 puts 'Tabel 8.2'
 IbEstonia::Trades::TaxReport.new(trades).print
 
 puts
+puts 'Tabel 8.1'
+dividends_report.print(:without_tax)
+
+puts
 puts 'Tabel 8.8'
-IbEstonia::Dividends::TaxReport.new(dividends, exchange_rate_fetcher).print
+dividends_report.print(:with_tax)

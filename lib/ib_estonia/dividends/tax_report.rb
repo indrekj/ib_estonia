@@ -8,6 +8,8 @@ module IbEstonia
       end
 
       def generate_tax_records
+        return @_generated_tax_records if defined?(@_generated_tax_records)
+
         tax_records_by_date = {}
 
         @accruals.each do |accrual|
@@ -37,25 +39,40 @@ module IbEstonia
           end
         end
 
-        tax_records_by_date.values.flat_map(&:values)
+        @_generated_tax_records = tax_records_by_date.values.flat_map(&:values)
+        @_generated_tax_records
       end
 
-      def print
-        records = generate_tax_records
+      def print(type)
+        filtered_records = filter(generate_tax_records, type)
+        records_by_year = filtered_records.group_by {|record| record.date.year}
+
+        years = records_by_year.keys.sort
+        last_two_years = years.last(2)
 
         table = Terminal::Table.new
+        last_two_years.each do |year|
+          records = records_by_year[year]
 
-        records
-          .group_by {|record| record.date.year}
-          .sort_by {|year, _| year}
-          .each do |year, records|
-            EmtaFormatter.format(records).each(&table.method(:add_row))
-            table.add_separator
-            table.add_row(EmtaFormatter.format_sum_in_euros(records, @exchange_rate_fetcher))
-            table.add_separator
-          end
+          EmtaFormatter.format(records).each(&table.method(:add_row))
+          table.add_separator
+          table.add_row(EmtaFormatter.format_sum_in_euros(records, @exchange_rate_fetcher))
+          table.add_separator
+        end
 
         puts table
+      end
+
+      private
+
+      def filter(records, type)
+        if type == :with_tax
+          records.filter {|r| r.tax.positive?}
+        elsif type == :without_tax
+          records.filter {|r| r.tax.zero?}
+        else
+          raise "Uknown type: #{type}"
+        end
       end
     end
   end

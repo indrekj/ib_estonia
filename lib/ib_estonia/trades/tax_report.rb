@@ -14,19 +14,21 @@ module IbEstonia
       end
 
       def print
-        records = generate_tax_records
+        records_by_year = generate_tax_records.group_by {|record| record.date.year}
+
+        years = records_by_year.keys.sort
+        last_two_years = years.last(2)
 
         table = Terminal::Table.new
+        last_two_years.each do |year|
+          records = records_by_year[year]
 
-        records
-          .group_by {|record| record.date.year}
-          .sort_by {|year, _| year}
-          .each do |year, records|
-            EmtaFormatter.format(records).each(&table.method(:add_row))
-            table.add_separator
-            table.add_row(EmtaFormatter.format_sum(records))
-            table.add_separator
-          end
+          EmtaFormatter.format(records).each(&table.method(:add_row))
+          table.add_separator
+          table.add_row(EmtaFormatter.format_sum(records))
+          table.add_separator
+        end
+
 
         puts table
       end
