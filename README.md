@@ -52,3 +52,4 @@ Create a report using the confirmation data. For example, if you have data for 2
 * Unknown: fractional shares may not work
 * Unknown: one company acquiring another for money may not work
 * Unknown: one company acquiring another for shares may not work
+* Dividends: We use dividend report date for both report and tax withheld dates. This might not always be correct.

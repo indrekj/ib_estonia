@@ -10,36 +10,30 @@ module IbEstonia
       def generate_tax_records
         return @_generated_tax_records if defined?(@_generated_tax_records)
 
-        tax_records_by_date = {}
+        tax_records_by_id = {}
 
         @accruals.each do |accrual|
-          date = accrual.date
-          name = accrual.symbol.name
+          id = accrual.datetime_identifier
 
-          tax_records_by_date[date] ||= {}
-          tax_records_by_date[date][name] ||= TaxRecord.new(
+          tax_records_by_id[id] ||= TaxRecord.new(
             date: accrual.date,
             currency: accrual.currency,
             symbol: accrual.symbol
           )
-          tax_records_by_date[date][name] =
-            tax_records_by_date[date][name].increase(gross_amount: accrual.gross_amount)
+          tax_records_by_id[id] = tax_records_by_id[id].increase(gross_amount: accrual.gross_amount)
         end
 
         @withholding_taxes.each do |withholding_tax|
-          date = withholding_tax.date
-          name = withholding_tax.symbol.name
+          id = withholding_tax.datetime_identifier
 
-          tax_records_by_date[date] ||= {}
-          if tax_record = tax_records_by_date[date][name]
-            tax_records_by_date[date][name] =
-              tax_record.increase(tax: withholding_tax.amount)
+          if (tax_record = tax_records_by_id[id])
+            tax_records_by_id[id] = tax_record.increase(tax: withholding_tax.amount)
           else
             puts "Found 'withholding tax' record without Dividend Accrual record: #{withholding_tax.inspect}"
           end
         end
 
-        @_generated_tax_records = tax_records_by_date.values.flat_map(&:values)
+        @_generated_tax_records = tax_records_by_id.values
         @_generated_tax_records
       end
 
@@ -52,7 +46,7 @@ module IbEstonia
 
         table = Terminal::Table.new
         last_two_years.each do |year|
-          records = records_by_year[year]
+          records = records_by_year[year].sort_by(&:date)
 
           EmtaFormatter.format(records).each(&table.method(:add_row))
           table.add_separator

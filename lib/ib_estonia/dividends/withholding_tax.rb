@@ -8,6 +8,7 @@ module IbEstonia
         attribute :amount, BigDecimal
         attribute :currency, String
         attribute :symbol, SymbolInfo
+        attribute :datetime_identifier, String
       end
     end
   end

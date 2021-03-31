@@ -21,7 +21,7 @@ module IbEstonia
 
         table = Terminal::Table.new
         last_two_years.each do |year|
-          records = records_by_year[year]
+          records = records_by_year[year].sort_by(&:date)
 
           EmtaFormatter.format(records).each(&table.method(:add_row))
           table.add_separator
