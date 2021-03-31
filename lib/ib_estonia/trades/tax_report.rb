@@ -26,7 +26,7 @@ module IbEstonia
           EmtaFormatter.format(records).each(&table.method(:add_row))
           table.add_separator
           table.add_row(EmtaFormatter.format_sum(records))
-          table.add_separator
+          table.add_separator if year < last_two_years.last
         end
 
 

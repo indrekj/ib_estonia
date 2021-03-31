@@ -33,13 +33,25 @@ end
 dividends_report = IbEstonia::Dividends::TaxReport.new(dividends, exchange_rate_fetcher)
 
 puts
-puts 'Tabel 8.2'
+puts <<~EOS
+###################################################################
+# TABEL 8.2 - Välismaalt saadud tulu - Väärtpaberite võõrandamine #
+###################################################################
+EOS
 IbEstonia::Trades::TaxReport.new(trades).print
 
 puts
-puts 'Tabel 8.1'
+puts <<~EOS
+#########################################################
+# TABEL 8.1 - Välismaalt saadud tulu - Palk ja muu tasu #
+#########################################################
+EOS
 dividends_report.print(:without_tax)
 
 puts
-puts 'Tabel 8.8'
+puts <<~EOS
+##################################################################################
+# TABEL 8.8 - Välismaalt saadud tulu - Välisriigis saadud, Eestis maksuvaba tulu #
+##################################################################################
+EOS
 dividends_report.print(:with_tax)
