@@ -39,15 +39,18 @@ describe 'LHV' do
     ])
 
     expect(tax_records.count).to eq(1)
-    expect(tax_records[0][0]).to eq('US5949181045')
-    expect(tax_records[0][1]).to eq('MSFT: Microsoft Corporation')
-    expect(tax_records[0][2]).to eq('aktsia')
-    expect(tax_records[0][3]).to eq(150)
-    expect(tax_records[0][4]).to eq('04.11.2011')
-    expect(tax_records[0][5]).to eq('US') # LHV has USA, but should be fine
-    expect(tax_records[0][6]).to eq('2648.32') # LHV had 2648.25
-    expect(tax_records[0][7]).to eq('19.94')   # LhV had 19.95
-    expect(tax_records[0][8]).to eq('3058.16')
+    expect(tax_records[0]).to eq([
+      'US5949181045',
+      'MSFT: Microsoft Corporation',
+      'US', # LHV has USA, but should be fine
+      'aktsia',
+      '04.11.2011',
+      150,
+      '2648.32', # LHV had 2648.25
+      '19.94',   # LhV had 19.95
+      '3058.16',
+      0
+    ])
   end
 
   it 'tests exercising call option' do
@@ -82,15 +85,18 @@ describe 'LHV' do
     ])
 
     expect(tax_records.count).to eq(1)
-    expect(tax_records[0][0]).to eq('US123')
-    expect(tax_records[0][1]).to eq('CBMWAUG117200: BMW call Aug 2011 72')
-    expect(tax_records[0][2]).to eq('optsioon')
-    expect(tax_records[0][3]).to eq(2)
-    expect(tax_records[0][4]).to eq('02.08.2011')
-    expect(tax_records[0][5]).to eq('US') # LHV has USA, but should be fine
-    expect(tax_records[0][6]).to eq('388.00')
-    expect(tax_records[0][7]).to eq('8.00')
-    expect(tax_records[0][8]).to eq('400.00')
+    expect(tax_records[0]).to eq([
+      'US123',
+      'CBMWAUG117200: BMW call Aug 2011 72',
+      'US', # LHV has USA, but should be fine
+      'optsioon',
+      '02.08.2011',
+      2,
+      '388.00',
+      '8.00',
+      '400.00',
+      0
+    ])
   end
 
 
