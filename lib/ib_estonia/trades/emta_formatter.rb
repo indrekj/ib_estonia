@@ -12,10 +12,10 @@ module IbEstonia
         [
           tax_record.symbol.isin || 'ISIN NOT FOUND',
           name(tax_record),
-          security_type(tax_record),
-          tax_record.quantity,
-          tax_record.date.strftime("%d.%m.%Y"),
           tax_record.symbol.country || 'COUNTRY NOT FOUND',
+          security_type(tax_record),
+          tax_record.date.strftime("%d.%m.%Y"),
+          tax_record.quantity,
           open_amount(tax_record),
           close_commission(tax_record),
           close_amount(tax_record),
@@ -28,6 +28,7 @@ module IbEstonia
         total_close_commision = tax_records.sum(&method(:close_commission))
         total_close_amount = tax_records.sum(&method(:close_amount))
         [
+          nil,
           nil,
           nil,
           nil,

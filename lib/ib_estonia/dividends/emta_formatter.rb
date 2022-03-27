@@ -14,9 +14,9 @@ module IbEstonia
           name(tax_record),
           tax_record.symbol.country || 'COUNTRY NOT FOUND',
           'dividend',
-          tax_record.date.strftime("%d.%m.%Y"),
           tax_record.currency,
           tax_record.gross_amount,
+          tax_record.date.strftime("%d.%m.%Y"),
           tax_record.tax,
           withheld_tax_date(tax_record)
         ].map(&method(:Format))
@@ -36,8 +36,8 @@ module IbEstonia
           nil,
           nil,
           'IN EUROS:',
-          nil,
           total_gross_amount,
+          nil,
           total_witheld_tax,
           nil
         ].map(&method(:Format))
