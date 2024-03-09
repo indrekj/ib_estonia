@@ -43,9 +43,9 @@ Interactive Brokers flex queries do not provide ISIN numbers for all securities.
 
 ### Create report
 
-Create a report using the confirmation data. For example, if you have data for 2015-2017 then run:
+Create a report using the confirmation data. For example, if you have data for 2015-2023 then run:
 ```sh
-./start ib-2016.xml ib-2017.xml ib-2018.xml ib-2019.xml ib-2020.xml ib-2021.xml
+./start ib-2016.xml ib-2017.xml ib-2018.xml ib-2019.xml ib-2020.xml ib-2021.xml ib-2022.xml ib-2023.xml
 ```
 
 ## Limitations
