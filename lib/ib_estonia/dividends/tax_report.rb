@@ -50,7 +50,7 @@ module IbEstonia
             table.add_row([year])
             table.add_separator
           else
-            table.add_row([year, '(skipped)'])
+            table.add_row([year, '(hidden)'])
             table.add_separator
             next
           end
