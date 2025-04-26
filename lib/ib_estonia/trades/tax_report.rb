@@ -13,6 +13,13 @@ module IbEstonia
         end
       end
 
+      def generate_final_balances
+        @trades_by_symbol.map do |(symbol, trades)|
+          puts symbol.inspect
+          [symbol, generate_final_balance(symbol, trades)]
+        end
+      end
+
       def print
         records_by_year = generate_tax_records.group_by {|record| record.date.year}
 
@@ -38,6 +45,23 @@ module IbEstonia
           table.add_separator if year < last_two_years.last
         end
 
+        table.add_separator
+        table.add_row(['FINAL BALANCE', 'ALL CURRENCIES ARE ALREADY IN EUROS'])
+        table.add_separator
+        sum = 0
+        generate_final_balances.each do |symbol, balance|
+          open_amount, open_commission = balance.close_remaining
+          next if open_amount == 0
+          sum += (open_amount + open_commission)
+
+          table.add_row([symbol&.name, Format(open_amount), Format(open_commission)])
+        end
+        table.add_separator
+        table.add_row(['TOTAL', Format(sum)])
+
+        table.add_separator
+        table.add_row(['TODO', 'WE STILL NEED TO ADD CASH BALANCES'])
+        table.add_row(['TODO', 'HOW DO WE CONVERT USD CASH BALANCE TO EUROS??'])
 
         puts table
       end
@@ -70,6 +94,20 @@ module IbEstonia
             tax_records
           end
         end
+      end
+
+      def generate_final_balance(_symbol, trades)
+        symbol_balance = SymbolBalance.new
+
+        trades.each do |trade|
+          if symbol_balance.should_close?(trade)
+            symbol_balance.close(trade.quantity)
+          else
+            symbol_balance << trade
+          end
+        end
+
+        symbol_balance
       end
     end
   end

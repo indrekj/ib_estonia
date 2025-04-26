@@ -29,6 +29,10 @@ module IbEstonia
         [amount, commission]
       end
 
+      def close_remaining
+        close(@open_trades.sum(&:remaining_quantity))
+      end
+
       def <<(trade)
         @open_trades << OpenTrade.new(
           type: trade.type,
