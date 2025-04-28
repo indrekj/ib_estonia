@@ -15,7 +15,6 @@ module IbEstonia
 
       def generate_final_balances
         @trades_by_symbol.map do |(symbol, trades)|
-          puts symbol.inspect
           [symbol, generate_final_balance(symbol, trades)]
         end
       end
