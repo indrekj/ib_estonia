@@ -33,6 +33,14 @@ module IbEstonia
             record.each {|key, val| record[key] = val.value}
           end
           .map do |record|
+            if record['conid'] == ''
+              # Not entirely sure what these records are.
+              #   E.g. `WITHHOLDING @ 20% ON CREDIT INT FOR OCT-2024`.
+              # Not recording these seems to mean that we have to pay slightly
+              # more taxes, but legally it should be fine.
+              next
+            end
+
             WithholdingTax.new(
               date: record['reportDate'],
               amount: BigDecimal(record['amount']).abs,
