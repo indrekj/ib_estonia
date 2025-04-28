@@ -13,7 +13,7 @@ module IbEstonia
         tax_records_by_id = {}
 
         @accruals.each do |accrual|
-          id = accrual.datetime_identifier
+          id = accrual.datetime_identifier + accrual.symbol.isin
 
           tax_records_by_id[id] ||= TaxRecord.new(
             date: accrual.date,
@@ -24,7 +24,7 @@ module IbEstonia
         end
 
         @withholding_taxes.each do |withholding_tax|
-          id = withholding_tax.datetime_identifier
+          id = withholding_tax.datetime_identifier + withholding_tax.symbol.isin
 
           if (tax_record = tax_records_by_id[id])
             tax_records_by_id[id] = tax_record.increase(tax: withholding_tax.amount)
@@ -57,7 +57,7 @@ module IbEstonia
 
           records = records_by_year[year].sort_by(&:date)
 
-          EmtaFormatter.format(records).each(&table.method(:add_row))
+          EmtaFormatter.format(records, @exchange_rate_fetcher).each(&table.method(:add_row))
           table.add_separator
           table.add_row(EmtaFormatter.format_sum_in_euros(records, @exchange_rate_fetcher))
           table.add_separator if year < last_two_years.last

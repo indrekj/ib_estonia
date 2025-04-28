@@ -2,13 +2,13 @@ module IbEstonia
   module Dividends
     # See https://www.emta.ee/sites/default/files/eraklient/tulu-deklareerimine/deklaratsioonide-vormid/2017/tabel_8.8.pdf
     module EmtaFormatter
-      def self.format(tax_records)
+      def self.format(tax_records, exchange_rate_fetcher)
         tax_records
           .sort_by(&:date)
-          .map(&method(:format_record))
+          .map { |tax_record| format_record(tax_record, exchange_rate_fetcher) }
       end
 
-      def self.format_record(tax_record)
+      def self.format_record(tax_record, exchange_rate_fetcher)
         [
           tax_record.symbol.isin || 'ISIN NOT FOUND',
           name(tax_record),
@@ -18,7 +18,8 @@ module IbEstonia
           tax_record.gross_amount,
           tax_record.date.strftime("%d.%m.%Y"),
           tax_record.tax,
-          withheld_tax_date(tax_record)
+          withheld_tax_date(tax_record),
+          in_euros(tax_record, :gross_amount, exchange_rate_fetcher)
         ].map(&method(:Format))
       end
 
