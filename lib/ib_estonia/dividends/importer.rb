@@ -43,7 +43,7 @@ module IbEstonia
 
             WithholdingTax.new(
               date: record['reportDate'],
-              amount: BigDecimal(record['amount']).abs,
+              amount: BigDecimal(record['amount']) * -1,
               currency: record['currency'],
               datetime_identifier: record['dateTime'],
               symbol: symbols.detect {|symbol| symbol.conid == record['conid']}
