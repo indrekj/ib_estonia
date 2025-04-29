@@ -59,8 +59,9 @@ module IbEstonia
         table.add_row(['TOTAL', Format(sum)])
 
         table.add_separator
-        table.add_row(['TODO', 'WE STILL NEED TO ADD CASH BALANCES'])
-        table.add_row(['TODO', 'HOW DO WE CONVERT USD CASH BALANCE TO EUROS??'])
+        table.add_row(['ADD', 'Take cash balances using MTM Summary (01.01.2024)'])
+        table.add_row(['ADD', 'Cash transactions from your bank to the IB account (2024)'])
+        table.add_row(['ADD', 'Dividends from 8.8 (include 2024 report to generate them)'])
 
         puts table
       end
