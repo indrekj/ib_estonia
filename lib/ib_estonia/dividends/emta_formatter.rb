@@ -19,7 +19,12 @@ module IbEstonia
           tax_record.date.strftime("%d.%m.%Y"),
           tax_record.tax,
           withheld_tax_date(tax_record),
-          in_euros(tax_record, :gross_amount, exchange_rate_fetcher)
+          exchange_rate_fetcher.convert(
+            amount: tax_record.gross_amount - tax_record.tax,
+            from: tax_record.currency,
+            to: 'EUR',
+            date: tax_record.date
+          )
         ].map(&method(:Format))
       end
 
@@ -29,6 +34,14 @@ module IbEstonia
         end
         total_witheld_tax = tax_records.sum do |tax_record|
           in_euros(tax_record, :tax, exchange_rate_fetcher)
+        end
+        total_without_tax = tax_records.sum do |tax_record|
+          exchange_rate_fetcher.convert(
+            amount: tax_record.gross_amount - tax_record.tax,
+            from: tax_record.currency,
+            to: 'EUR',
+            date: tax_record.date
+          )
         end
 
         [
@@ -40,7 +53,8 @@ module IbEstonia
           total_gross_amount,
           nil,
           total_witheld_tax,
-          nil
+          nil,
+          "FOR 6.5: #{Format(total_without_tax)}"
         ].map(&method(:Format))
       end
 
